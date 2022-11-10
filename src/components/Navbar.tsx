@@ -45,7 +45,7 @@ const NavData: NavBarGroupData[] = [
 function Navbar({ selectedTab }: { selectedTab: TabType }) {
   return (
     <>
-      <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-full w-[300px]">
+      <div className="overflow-y-auto py-4 px-3 bg-white rounded h-full w-[300px]">
         <NavBarLogo />
         {NavData.map((data) => {
           return (

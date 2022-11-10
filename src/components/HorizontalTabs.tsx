@@ -4,14 +4,21 @@ export type HorizontalTabType = "ALL" | "LIVE";
 export type HorizontalTabGroupProps = {
   selectedTab: HorizontalTabType;
   allTabs: HorizontalTabData[];
+  className?: string;
 };
 
 export function HorizontalTabGroup({
   allTabs,
   selectedTab,
+  className,
 }: HorizontalTabGroupProps) {
   return (
-    <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <div
+      className={classNames(
+        "text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700",
+        className
+      )}
+    >
       <ul className="flex flex-wrap -mb-px">
         {allTabs.map(({ onClick, tab }) => (
           <HorizontalTab
