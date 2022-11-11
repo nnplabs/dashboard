@@ -1,10 +1,11 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { Images } from "../images";
+import { ChannelType } from "../types/provider";
 
-export type VerticalTabType = "EMAIL" | "IN-APP" | "OTHERS";
+
 export type VerticalTabGroupProps = {
-  selectedTab: (tab: VerticalTabType) => void
+  selectedTab: (tab: ChannelType) => void
 };
 
 const allChannels: VerticalTabData[] = [
@@ -17,13 +18,13 @@ const allChannels: VerticalTabData[] = [
     imgSrc: Images.Nav.InApp,
   },
   {
-    tab: "OTHERS",
+    tab: "OTHER",
     imgSrc: Images.Nav.Other,
   },
 ];
 
 export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
-  const [channel, setSelectedChannel] = useState<VerticalTabType>('EMAIL');
+  const [channel, setSelectedChannel] = useState<ChannelType>('EMAIL');
   return (
     <div className="text-sm w-[120px] h-full font-medium text-center bg-white text-gray-500 border-r border-gray-200 dark:text-gray-400 dark:border-gray-700">
       <ul className="flex flex-col flex-wrap -mb-px">
@@ -41,7 +42,7 @@ export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
 }
 
 export type VerticalTabData = {
-  tab: VerticalTabType;
+  tab: ChannelType;
   imgSrc: string;
 };
 

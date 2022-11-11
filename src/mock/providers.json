@@ -1,0 +1,48 @@
+{
+  "providers": [
+    {
+      "config": [
+        {
+          "key": "account_sid",
+          "display_name": "Account SID",
+          "required": true,
+          "type": "text"
+        },
+        {
+          "key": "auth_key",
+          "display_name": "Auth Key",
+          "required": true,
+          "type": "text"
+        },
+        {
+          "key": "from",
+          "display_name": "From",
+          "required": true,
+          "type": "text"
+        }
+      ],
+      "channel": "EMAIL",
+      "provider_key": "TWILIO",
+      "display_name": "Twilio"
+    },
+    {
+      "config": [
+        {
+          "key": "bot_token",
+          "display_name": "Bot Token",
+          "required": true,
+          "type": "text"
+        }
+      ],
+      "channel": "OTHER",
+      "provider_key": "TELEGRAM",
+      "display_name": "Telegram"
+    },
+    {
+      "config": [],
+      "channel": "IN-APP",
+      "provider_key": "PIGEON_WEB",
+      "display_name": "Pigeon"
+    }
+  ]
+}
