@@ -63,7 +63,7 @@ function Navbar({ selectedTab }: { selectedTab: TabType }) {
 
 function NavBarLogo() {
   return (
-    <a href="https://flowbite.com/" className="flex items-center pl-2.5 mb-5">
+    <a href="#" className="flex items-center pl-2.5 mb-5">
       <img
         src="https://flowbite.com/docs/images/logo.svg"
         className="mr-3 h-6 sm:h-7"
@@ -80,14 +80,13 @@ function NavBarGroup({ navBarItems, title, selectedTab }: NavBarGroupProps) {
   const [show, setShow] = useState<boolean>(true);
   return (
     <>
-      <button
-        type="button"
-        className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+      <div
+        className="flex items-center p-2 w-full text-base font-normal text-gray-900 transition duration-75 group dark:text-white"
         onClick={() => setShow((val) => !val)}
       >
         <span className="flex-1 text-left whitespace-nowrap">{title}</span>
         <img className="h-6 w-6" src={Images.Nav.ArrowDown} />
-      </button>
+      </div>
       {show &&
         navBarItems.map((item) => {
           return <NavbarItem {...item} selectedTab={selectedTab} />;
@@ -105,7 +104,7 @@ function NavbarItem({ imgSrc, route, title, selectedTab }: NavBarItemProps) {
       className={classNames(
         "flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
         {
-          "bg-gray-100": title === selectedTab,
+          "bg-gray-700": title === selectedTab,
         }
       )}
       onClick={() => navigate(route)}
