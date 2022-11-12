@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { BodyLayout } from "../../components/BodyLayout";
-import ConfirmModel from "../../components/ConfirmModel";
 import CreateEventModal from "../../components/CreateEventModal";
 import Navbar from "../../components/Navbar";
 import { Page } from "../../components/Page";
-import { PageTitle } from "../../components/PageTitle";
 
 function Event() {
   const [search, setSearch] = useState("");
