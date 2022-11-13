@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App";
 import "./styles/global.css";
-// import '@near-wallet-selector/modal-ui-js/styles.css'
+import '@near-wallet-selector/modal-ui-js/styles.css'
 
 import { WalletSelectorContextProvider } from "./context/WalletSelectorContext";
 

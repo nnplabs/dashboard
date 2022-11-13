@@ -7,6 +7,7 @@ import { setupDefaultWallets } from "@near-wallet-selector/default-wallets";
 import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupSender } from "@near-wallet-selector/sender";
 import { distinctUntilChanged, map } from 'rxjs'
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 declare global {
   interface Window {
@@ -32,13 +33,12 @@ export const WalletSelectorContextProvider = ({ children }: any): ReactElement =
 
   const init = useCallback(async () => {
     const _selector = await setupWalletSelector({
-      network: "testnet",
+      network: "mainnet",
       debug: true,
       modules: [
-        ...(await setupDefaultWallets()),
         setupNearWallet(),
         setupSender(),
-        
+        setupMyNearWallet()
       ],
     });
     const _modal = setupModal(_selector, { contractId: "test.near" });

@@ -8,7 +8,7 @@ function Login() {
     return (
         <div className='flex items-center justify-center w-screen h-screen'>
             <Button onClick={() => modal?.show()}>
-                Login
+                Login with Near
             </Button>
         </div>
     )
