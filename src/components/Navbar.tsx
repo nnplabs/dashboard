@@ -11,12 +11,12 @@ const NavData: NavBarGroupData[] = [
       {
         title: "Metrics",
         route: "/dashboard/metrics",
-        imgSrc: Images.Nav.Metric,
+        imgSrc: "monitoring",
       },
       {
         title: "Logs",
         route: "/dashboard/logs",
-        imgSrc: Images.Nav.Log,
+        imgSrc: "description",
       },
     ],
   },
@@ -26,17 +26,17 @@ const NavData: NavBarGroupData[] = [
       {
         title: "Events",
         route: "/management/events",
-        imgSrc: Images.Nav.Event,
+        imgSrc: "event",
       },
       {
         title: "Integrations",
         route: "/management/integrations",
-        imgSrc: Images.Nav.Integration,
+        imgSrc: "send",
       },
       {
         title: "Settings",
         route: "/management/settings",
-        imgSrc: Images.Nav.Setting,
+        imgSrc: "settings",
       },
     ],
   },
@@ -45,7 +45,7 @@ const NavData: NavBarGroupData[] = [
 function Navbar({ selectedTab }: { selectedTab: TabType }) {
   return (
     <>
-      <div className="overflow-y-auto py-4 px-3 bg-white rounded h-full w-[300px]">
+      <div className="overflow-y-auto py-4 px-3 bg-gray-800 rounded h-full w-[300px]">
         <NavBarLogo />
         {NavData.map((data) => {
           return (
@@ -81,17 +81,16 @@ function NavBarGroup({ navBarItems, title, selectedTab }: NavBarGroupProps) {
   return (
     <>
       <div
-        className="flex items-center p-2 w-full text-base font-normal text-gray-900 transition duration-75 group dark:text-white"
+        className="flex items-center p-2 w-full text-base font-normal transition duration-75 group text-white"
         onClick={() => setShow((val) => !val)}
       >
         <span className="flex-1 text-left whitespace-nowrap">{title}</span>
-        <img className="h-6 w-6" src={Images.Nav.ArrowDown} />
       </div>
       {show &&
         navBarItems.map((item) => {
           return <NavbarItem {...item} selectedTab={selectedTab} />;
         })}
-      <div className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700"></div>
+      <div className="pt-4 mt-4 space-y-2 border-t border-gray-700"></div>
     </>
   );
 }
@@ -102,14 +101,14 @@ function NavbarItem({ imgSrc, route, title, selectedTab }: NavBarItemProps) {
     <button
       type="button"
       className={classNames(
-        "flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+        "flex items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group  text-white hover:bg-gray-700",
         {
           "bg-gray-700": title === selectedTab,
         }
       )}
       onClick={() => navigate(route)}
     >
-      <img className="h-5 w-5" src={imgSrc} />
+      <i className="material-icons">{imgSrc}</i>
       <span className="mx-3 text-left whitespace-nowrap">{title}</span>
     </button>
   );

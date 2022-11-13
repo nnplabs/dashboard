@@ -6,8 +6,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Switch, TextField } from '@mui/material';
-import { NearMe } from '@mui/icons-material';
-
+import { Editor } from 'react-draft-wysiwyg';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 const steps = ['Event Details', 'Event Channels', 'Event Templates'];
 
 function getStepContent(step: number) {
@@ -33,13 +33,28 @@ function getStepContent(step: number) {
         </div>
       </Box>
     case 2:
-      return 'Event Templates';
+      return <Box className='flex flex-col p-6 gap-y-6 h-[70vh]'>
+        {/* <div className='px-2 font-semibold'>
+          Add Event Template
+        </div> */}
+        <Editor
+          // editorState={editorState}
+          toolbarClassName=''
+          toolbar={{
+            options: ['inline',  'textAlign'],
+          }
+          }
+          wrapperClassName="border-[1px] h-[60vh] w-[50vw]"
+          editorClassName="px-4 overflow-hidden"
+          // onEditorStateChange={this.onEditorStateChange}
+        />
+      </Box>;
     default:
       return <></>
   }
 }
 
-export default function CreateEventSteps() {
+export default function CreateEventSteps({onFinish}: {onFinish: () => void}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
@@ -57,7 +72,9 @@ export default function CreateEventSteps() {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
+    if(activeStep === steps.length - 1) {
+      onFinish()
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };

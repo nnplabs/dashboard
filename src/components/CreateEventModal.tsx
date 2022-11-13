@@ -28,9 +28,6 @@ export default function CreateEventModal({ open, handleClickOpen, handleClose }:
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open full-screen dialog
-      </Button>
       <Dialog
         fullScreen
         open={open}
@@ -53,7 +50,7 @@ export default function CreateEventModal({ open, handleClickOpen, handleClose }:
           </Toolbar>
         </AppBar>
         <Box className="flex items-center justify-center p-10 w-3/5 mx-auto">
-            <CreateEventSteps />
+            <CreateEventSteps onFinish={() => handleClose()}/>
         </Box>
       </Dialog>
     </div>
