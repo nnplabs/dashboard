@@ -3,10 +3,12 @@ import { BodyLayout } from "../../../../components/BodyLayout";
 import { VerticalTabGroup } from "../../../../components/VerticalTabs";
 
 import { ChannelType, ProviderMetadata } from "../../../../types/provider";
-import { useAllProviders } from "../../../../hooks/useAllProviders";
+
 import { IntegrationCard } from "../../../../components/IntegrationCard";
 import { Modal } from "../../../../components/Modal";
 import IntegrationFormDialog from "./ProviderForm";
+import { useAllAvailableProviders } from "../../../../hooks/useProvider";
+import { CircularProgress } from "@mui/material";
 
 function AllIntegrations() {
   const [selectedChannel, setSelectedChannel] = useState<ChannelType>("EMAIL");
@@ -15,22 +17,24 @@ function AllIntegrations() {
   >([]);
   const [selectedProvider, setSelectedProvider] = useState<ProviderMetadata>();
 
-  const providers = useAllProviders();
-
+  const { allProviders, isLoading } = useAllAvailableProviders();
+  
   useEffect(() => {
     setFilteredProviders(
-      providers.filter((p) => p.channel === selectedChannel)
+      allProviders.filter((p) => p.channel === selectedChannel)
     );
-  }, [selectedChannel, providers]);
+  }, [selectedChannel, allProviders]);
 
   return (
     <>
       <BodyLayout className="px-10 pb-10">
         <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)} />
         <div className="h-full w-full bg-white flex flex-col p-7">
+          {isLoading && <CircularProgress />}
           {filteredProviders.map((p) => {
             return (
               <IntegrationCard
+                key={p.key}
                 title={p.name}
                 imageSrc={p.logo}
                 channel={p.channel}

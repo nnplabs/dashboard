@@ -50,6 +50,7 @@ function Navbar({ selectedTab }: { selectedTab: TabType }) {
         {NavData.map((data) => {
           return (
             <NavBarGroup
+              key={data.title}
               title={data.title}
               navBarItems={data.navBarItems}
               selectedTab={selectedTab}
@@ -88,7 +89,7 @@ function NavBarGroup({ navBarItems, title, selectedTab }: NavBarGroupProps) {
       </div>
       {show &&
         navBarItems.map((item) => {
-          return <NavbarItem {...item} selectedTab={selectedTab} />;
+          return <NavbarItem key={item.title} {...item} selectedTab={selectedTab} />;
         })}
       <div className="pt-4 mt-4 space-y-2 border-t border-gray-700"></div>
     </>

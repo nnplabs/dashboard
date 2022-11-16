@@ -30,6 +30,7 @@ export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
       <ul className="flex flex-col flex-wrap -mb-px">
         {allChannels.map(({ tab, imgSrc }) => (
           <VerticalTab
+            key={tab}
             tab={tab}
             imgSrc={imgSrc}
             onClick={() => {setSelectedChannel(tab); selectedTab(tab)}}

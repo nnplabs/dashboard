@@ -10,3 +10,9 @@ export type ProviderMetadata = {
   channel: ChannelType;
 };
 
+export type ProviderKey =
+  | "SENDGRID_MAIL"
+  | "FIREBASE"
+  | "PIGEON"
+  | "TELEGRAM"
+  | "SLACK";

@@ -22,6 +22,7 @@ export function HorizontalTabGroup({
       <ul className="flex flex-wrap -mb-px">
         {allTabs.map(({ onClick, tab }) => (
           <HorizontalTab
+            key={tab}
             tab={tab}
             onClick={onClick}
             isSelected={selectedTab === tab}
