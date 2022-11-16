@@ -9,12 +9,12 @@ import { EmailLiveIntegrations } from "./Email";
 import { ChannelType } from "../../../../types/provider";
 
 function LiveIntegrations() {
-  const [selectedChannel, setSelectedChannel] = useState<ChannelType>('EMAIL');
+  const [selectedChannel, setSelectedChannel] = useState<ChannelType>('MAIL');
 
   return (
     <BodyLayout>
       <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)}/>
-      {selectedChannel === "EMAIL" && <EmailLiveIntegrations />}
+      {selectedChannel === "MAIL" && <EmailLiveIntegrations />}
       {selectedChannel === "IN_APP" && <InAppLiveIntegrations />}
       {selectedChannel === "OTHER" && <OtherLiveIntegrations />}
     </BodyLayout>

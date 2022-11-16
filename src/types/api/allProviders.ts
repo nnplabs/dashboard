@@ -1,11 +1,11 @@
-import { ChannelType } from "../provider";
+import { ChannelType, ProviderKey } from "../provider";
 
 export type AllProvidersResponse = {
     providers: ProviderData[]
 }
 
 type ProviderData = {
-  provider_key: string;
+  provider_key: ProviderKey;
   display_name: string;
   channel: ChannelType
   config: ProviderConfig[];

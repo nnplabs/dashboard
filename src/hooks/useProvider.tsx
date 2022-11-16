@@ -57,7 +57,7 @@ export function useGetAllProviders(appName: string) {
 
 export function useCreateProvider() {
   const queryClient = useQueryClient();
-  const { isLoading, mutate: createProviderFn } = useMutation(
+  const { isLoading, mutateAsync: createProviderFn } = useMutation(
     (provider: CreateProviderRequest) => createProvider(provider),
     {
       onSuccess: () => {
@@ -66,7 +66,7 @@ export function useCreateProvider() {
       },
       onError: (error: AxiosError) => {
         const data: any = error?.response?.data;
-        toast.error(`${data?.explanation ?? data?.reason}`, {
+        toast.error(`${data?.reason}`, {
           position: "top-right",
         });
       },
@@ -141,7 +141,7 @@ export function useAllAvailableProviders() {
       const data: ProviderMetadata = {
         integrationsKeys: integrationKeys,
         name: provider.display_name,
-        key: provider.provider_key,
+        providerType: provider.provider_key,
         channel: provider.channel,
         logo: `${SERVER_URL}/images/${provider.provider_key.toLowerCase()}.png`,
       };

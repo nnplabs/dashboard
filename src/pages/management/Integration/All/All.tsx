@@ -11,7 +11,7 @@ import { useAllAvailableProviders } from "../../../../hooks/useProvider";
 import { CircularProgress } from "@mui/material";
 
 function AllIntegrations() {
-  const [selectedChannel, setSelectedChannel] = useState<ChannelType>("EMAIL");
+  const [selectedChannel, setSelectedChannel] = useState<ChannelType>("MAIL");
   const [filteredProviders, setFilteredProviders] = useState<
     ProviderMetadata[]
   >([]);
@@ -34,7 +34,7 @@ function AllIntegrations() {
           {filteredProviders.map((p) => {
             return (
               <IntegrationCard
-                key={p.key}
+                key={p.providerType}
                 title={p.name}
                 imageSrc={p.logo}
                 channel={p.channel}
