@@ -9,6 +9,7 @@ import "@near-wallet-selector/modal-ui-js/styles.css";
 import { WalletSelectorContextProvider } from "./context/WalletSelectorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AppContextProvider } from "./context/AppContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,8 +30,10 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <WalletSelectorContextProvider>
-        <ToastContainer />
-        <App />
+        <AppContextProvider>
+          <ToastContainer />
+          <App />
+        </AppContextProvider>
       </WalletSelectorContextProvider>
     </QueryClientProvider>
   </React.StrictMode>

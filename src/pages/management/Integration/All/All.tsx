@@ -30,7 +30,7 @@ function AllIntegrations() {
       <BodyLayout className="px-10 pb-10">
         <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)} />
         <div className="h-full w-full bg-white flex flex-col p-7">
-          {isLoading && <CircularProgress />}
+          {isLoading && <div className="m-auto"><CircularProgress /></div>}
           {filteredProviders.map((p) => {
             return (
               <IntegrationCard

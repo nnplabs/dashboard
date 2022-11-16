@@ -1,4 +1,4 @@
-export interface AppResponse {
+export interface AppData {
   id: string;
   name: string;
   description?: any;

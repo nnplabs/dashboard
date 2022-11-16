@@ -1,13 +1,13 @@
-import { AppResponse } from "../types/api/app";
+import { AppData } from "../types/api/app";
 import { apiClient } from "./api";
 
 export const getAllApps = async () => {
-  const response = await apiClient.get<AppResponse>("apps/getAll");
+  const response = await apiClient.get<AppData[]>("apps/getAll");
   return response.data;
 };
 
 export const createApp = async (appName: string, description?: string) => {
-  const response = await apiClient.post<AppResponse>("apps/create", {
+  const response = await apiClient.post<AppData>("apps/create", {
     appName,
     description,
   });
@@ -15,14 +15,14 @@ export const createApp = async (appName: string, description?: string) => {
 };
 
 export const getApp = async (appName: string) => {
-  const response = await apiClient.post<AppResponse>("apps/get", {
+  const response = await apiClient.post<AppData>("apps/get", {
     appName,
   });
   return response.data;
 };
 
 export const deleteApp = async (appName: string) => {
-  const response = await apiClient.post<AppResponse>("apps/delete", {
+  const response = await apiClient.post<AppData>("apps/delete", {
     appName,
   });
   return response.data;
