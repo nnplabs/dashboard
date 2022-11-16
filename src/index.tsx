@@ -11,10 +11,11 @@ import { WalletSelectorContextProvider } from "./context/WalletSelectorContext";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      networkMode: "offlineFirst",
-    },
-    mutations: {
-      networkMode: "offlineFirst",
+      staleTime: 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: 1,
     },
   },
 });

@@ -15,7 +15,7 @@ function LiveIntegrations() {
     <BodyLayout>
       <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)}/>
       {selectedChannel === "EMAIL" && <EmailLiveIntegrations />}
-      {selectedChannel === "IN-APP" && <InAppLiveIntegrations />}
+      {selectedChannel === "IN_APP" && <InAppLiveIntegrations />}
       {selectedChannel === "OTHER" && <OtherLiveIntegrations />}
     </BodyLayout>
   );

@@ -30,7 +30,7 @@ function Integration() {
       <Navbar selectedTab="Integrations" />
       <Page>
         <PageTitle title="Integrations" subTitle="Management >" />
-        <HorizontalTabGroup allTabs={allTabs} selectedTab={selectedTab} className='m-10'/>
+        <HorizontalTabGroup allTabs={allTabs} selectedTab={selectedTab} className='mx-10 mt-7 mb-10'/>
         {selectedTab === 'ALL' && <AllIntegrations />}
         {selectedTab === 'LIVE' && <LiveIntegrations />}
       </Page>

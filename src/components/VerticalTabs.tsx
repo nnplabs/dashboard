@@ -14,7 +14,7 @@ const allChannels: VerticalTabData[] = [
     imgSrc: Images.Nav.Mail,
   },
   {
-    tab: "IN-APP",
+    tab: "IN_APP",
     imgSrc: Images.Nav.InApp,
   },
   {

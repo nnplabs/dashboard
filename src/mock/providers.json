@@ -40,7 +40,7 @@
     },
     {
       "config": [],
-      "channel": "IN-APP",
+      "channel": "IN_APP",
       "provider_key": "PIGEON_WEB",
       "display_name": "Pigeon"
     }
