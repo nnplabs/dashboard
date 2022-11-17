@@ -7,11 +7,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import { login } from "./api/authApi";
+import { EventContextProvider } from "./context/EventContext";
 import { useWalletSelector } from "./context/WalletSelectorContext";
 import Log from "./pages/dashboard/Log";
 import Metric from "./pages/dashboard/Metric";
 import Login from "./pages/Login";
-import Event from "./pages/management/Event";
+import Event from "./pages/management/Event/Event";
 import Integration from "./pages/management/Integration/Integration";
 import Setting from "./pages/management/Setting";
 import RequireAuth from "./pages/RequireAuth";
@@ -45,10 +46,16 @@ export default function AppRoutes() {
             </RequireAuth>
           }
         />
-        <Route path="/management/events" element={
-          <RequireAuth>
-            <Event />
-          </RequireAuth>} />
+        <Route
+          path="/management/events"
+          element={
+            <RequireAuth>
+              <EventContextProvider>
+                <Event />
+              </EventContextProvider>
+            </RequireAuth>
+          }
+        />
         <Route path="/management/integrations" element={<Integration />} />
         <Route path="/management/settings" element={<Setting />} />
       </Routes>

@@ -50,7 +50,7 @@ export default function CreateEventModal({ open, handleClickOpen, handleClose }:
             </Typography>
           </Toolbar>
         </AppBar>
-        <Box className="flex items-center justify-center p-10 w-3/5 mx-auto">
+        <Box className="flex flex-col items-center justify-center p-10 w-full mx-auto h-full px-[10%] bg-gray-100">
             <CreateEventSteps onFinish={() => handleClose()}/>
         </Box>
       </Dialog>

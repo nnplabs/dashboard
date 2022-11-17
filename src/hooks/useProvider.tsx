@@ -36,7 +36,7 @@ export function useGetProvider(appName: string, providerName: string) {
 
 export function useGetAllProviders(appName: string) {
   const { isLoading, data, isFetching } = useQuery(
-    ["getAlProviders", appName],
+    ["getAllProviders", appName],
     () => getAllProviders(appName),
     {
       onError: (error: AxiosError) => {
@@ -61,7 +61,7 @@ export function useCreateProvider() {
     (provider: CreateProviderRequest) => createProvider(provider),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["getAlProviders"]);
+        queryClient.invalidateQueries(["getAllProviders"]);
         toast.success("Provider Created Successfully.");
       },
       onError: (error: AxiosError) => {
