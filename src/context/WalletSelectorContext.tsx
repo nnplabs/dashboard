@@ -8,6 +8,8 @@ import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import { setupSender } from "@near-wallet-selector/sender";
 import { distinctUntilChanged, map } from 'rxjs'
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { login } from "../api/authApi";
+import { useAppContext } from "./AppContext";
 
 declare global {
   interface Window {
@@ -30,6 +32,7 @@ export const WalletSelectorContextProvider = ({ children }: any): ReactElement =
   const [selector, setSelector] = useState<WalletSelector | null>(null);
   const [modal, setModal] = useState<WalletSelectorModal | null>(null);
   const [accounts, setAccounts] = useState<Array<AccountState>>([]);
+  const appContext = useAppContext() 
 
   const init = useCallback(async () => {
     const _selector = await setupWalletSelector({
@@ -71,7 +74,19 @@ export const WalletSelectorContextProvider = ({ children }: any): ReactElement =
       )
       .subscribe((nextAccounts) => {
         console.log("Accounts Update", nextAccounts);
-
+        if (nextAccounts.length > 0) {
+          login(nextAccounts[0].accountId).then((res) => {
+            appContext?.setSelectedApp({
+              id: res.appId,
+              name: res.appName,
+              description: res.appDescription,
+              createdAt: res.createdAt,
+              updatedAt: res.updatedAt,
+              ownerAddress: res.ownerAddress,
+              metadata: res.metadata,
+            });
+            })
+          }
         setAccounts(nextAccounts);
       });
 
