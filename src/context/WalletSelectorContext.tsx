@@ -76,9 +76,17 @@ export const WalletSelectorContextProvider = ({ children }: any): ReactElement =
         console.log("Accounts Update", nextAccounts);
         if (nextAccounts.length > 0) {
           login(nextAccounts[0].accountId).then((res) => {
-            appContext?.setAppState(res)
-          })
-        }
+            appContext?.setSelectedApp({
+              id: res.appId,
+              name: res.appName,
+              description: res.appDescription,
+              createdAt: res.createdAt,
+              updatedAt: res.updatedAt,
+              ownerAddress: res.ownerAddress,
+              metadata: res.metadata,
+            });
+            })
+          }
         setAccounts(nextAccounts);
       });
 
