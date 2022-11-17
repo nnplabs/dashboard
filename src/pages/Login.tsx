@@ -1,15 +1,9 @@
 import { Button } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { toast } from "react-toastify";
-import { login } from "../api/authApi";
 import { useWalletSelector } from "../context/WalletSelectorContext";
 
 function Login() {
   const { modal } = useWalletSelector() ?? {};
 
-  const ownerAddress = "RefDapp";
-  login(ownerAddress);
 //   const { isLoading: m, data: dd } = useQuery(
 //     ["login", ownerAddress],
 //     () => login(ownerAddress),

@@ -7,6 +7,7 @@ import "./styles/global.css";
 import '@near-wallet-selector/modal-ui-js/styles.css'
 
 import { WalletSelectorContextProvider } from "./context/WalletSelectorContext";
+import { AppContextProvider } from "./context/AppContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,9 +28,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <WalletSelectorContextProvider>
-        <App />
-      </WalletSelectorContextProvider>
+      <AppContextProvider>
+        <WalletSelectorContextProvider>
+          <App />
+        </WalletSelectorContextProvider>
+      </AppContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

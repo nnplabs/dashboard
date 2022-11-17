@@ -25,7 +25,8 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function CreateEventModal({ open, handleClickOpen, handleClose }: { open: boolean, handleClickOpen: () => void, handleClose: () => void }) {
-
+  const [eventDetails, setEventDetails] = React.useState<Event>()
+  
   return (
     <div>
       <Dialog

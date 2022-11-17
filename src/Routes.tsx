@@ -6,6 +6,7 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
+import { login } from "./api/authApi";
 import { useWalletSelector } from "./context/WalletSelectorContext";
 import Log from "./pages/dashboard/Log";
 import Metric from "./pages/dashboard/Metric";
@@ -44,7 +45,10 @@ export default function AppRoutes() {
             </RequireAuth>
           }
         />
-        <Route path="/management/events" element={<Event />} />
+        <Route path="/management/events" element={
+          <RequireAuth>
+            <Event />
+          </RequireAuth>} />
         <Route path="/management/integrations" element={<Integration />} />
         <Route path="/management/settings" element={<Setting />} />
       </Routes>
