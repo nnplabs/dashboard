@@ -7,7 +7,7 @@ import {
 } from "../../../components/HorizontalTabs";
 import Navbar from "../../../components/Navbar";
 import { Page } from "../../../components/Page";
-import { PageTitle } from "../../../components/PageTitle";
+import { PageTopBar } from "../../../components/PageTopBar";
 import AllIntegrations from "./All/All";
 import LiveIntegrations from "./Live/Live";
 
@@ -29,7 +29,7 @@ function Integration() {
     <BodyLayout>
       <Navbar selectedTab="Integrations" />
       <Page>
-        <PageTitle title="Integrations" subTitle="Management >" />
+        <PageTopBar title="Integrations" subTitle="Management >" />
         <HorizontalTabGroup allTabs={allTabs} selectedTab={selectedTab} className='mx-10 mt-7 mb-10'/>
         {selectedTab === 'ALL' && <AllIntegrations />}
         {selectedTab === 'LIVE' && <LiveIntegrations />}

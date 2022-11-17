@@ -1,12 +1,14 @@
+import { CircularProgress } from "@mui/material";
+import { useAppContext } from "./context/AppContext";
 import AppRoutes from "./Routes";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
-  return (
-    <>
-      <ToastContainer />
-      <AppRoutes />
-    </>
-  );
+  const data = useAppContext();
+  if (!data)
+    return (
+      <div className="h-full w-full flex">
+        <CircularProgress className="m-auto" />
+      </div>
+    );
+  return <AppRoutes />;
 }

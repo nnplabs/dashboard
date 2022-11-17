@@ -10,7 +10,7 @@ export type VerticalTabGroupProps = {
 
 const allChannels: VerticalTabData[] = [
   {
-    tab: "EMAIL",
+    tab: "MAIL",
     imgSrc: Images.Nav.Mail,
   },
   {
@@ -24,12 +24,13 @@ const allChannels: VerticalTabData[] = [
 ];
 
 export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
-  const [channel, setSelectedChannel] = useState<ChannelType>('EMAIL');
+  const [channel, setSelectedChannel] = useState<ChannelType>('MAIL');
   return (
     <div className="text-sm w-[120px] h-full font-medium text-center bg-white text-gray-500 border-r border-gray-200 dark:text-gray-400 dark:border-gray-700">
       <ul className="flex flex-col flex-wrap -mb-px">
         {allChannels.map(({ tab, imgSrc }) => (
           <VerticalTab
+            key={tab}
             tab={tab}
             imgSrc={imgSrc}
             onClick={() => {setSelectedChannel(tab); selectedTab(tab)}}

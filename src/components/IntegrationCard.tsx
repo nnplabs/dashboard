@@ -15,7 +15,7 @@ export function IntegrationCard({
   onClick
 }: IntegrationCardProps) {
   const channelImg = {
-    EMAIL: Images.Nav.Mail,
+    MAIL: Images.Nav.Mail,
     "IN_APP": Images.Nav.InApp,
     OTHER: Images.Nav.Other,
   }[channel];
