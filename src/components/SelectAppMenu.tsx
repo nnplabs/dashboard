@@ -66,7 +66,7 @@ export function SelectAppButton({
         <div className="font-medium text-base text-gray-800">{appName}</div>
       </div>
       <div className="flex flex-col">
-        <i className="fa fa-angle-down text-3xl"></i>
+        <i className="fa fa-angle-down text-2xl"></i>
       </div>
     </div>
   );

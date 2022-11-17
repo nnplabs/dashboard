@@ -1,39 +1,26 @@
 import classNames from "classnames";
 import { useState } from "react";
-import { Images } from "../images";
-import { ChannelType } from "../types/provider";
-
+import { ChannelImg, ChannelName, ChannelType } from "../types/provider";
 
 export type VerticalTabGroupProps = {
-  selectedTab: (tab: ChannelType) => void
+  selectedTab: (tab: ChannelType) => void;
 };
 
-const allChannels: VerticalTabData[] = [
-  {
-    tab: "MAIL",
-    imgSrc: Images.Nav.Mail,
-  },
-  {
-    tab: "IN_APP",
-    imgSrc: Images.Nav.InApp,
-  },
-  {
-    tab: "OTHER",
-    imgSrc: Images.Nav.Other,
-  },
-];
+const allChannels: ChannelType[] = ["MAIL", "IN_APP", "OTHER"];
 
-export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
-  const [channel, setSelectedChannel] = useState<ChannelType>('MAIL');
+export function VerticalTabGroup({ selectedTab }: VerticalTabGroupProps) {
+  const [channel, setSelectedChannel] = useState<ChannelType>("MAIL");
   return (
     <div className="text-sm w-[120px] h-full font-medium text-center bg-white text-gray-500 border-r border-gray-200 dark:text-gray-400 dark:border-gray-700">
       <ul className="flex flex-col flex-wrap -mb-px">
-        {allChannels.map(({ tab, imgSrc }) => (
+        {allChannels.map((tab) => (
           <VerticalTab
             key={tab}
             tab={tab}
-            imgSrc={imgSrc}
-            onClick={() => {setSelectedChannel(tab); selectedTab(tab)}}
+            onClick={() => {
+              setSelectedChannel(tab);
+              selectedTab(tab);
+            }}
             isSelected={channel === tab}
           />
         ))}
@@ -42,17 +29,13 @@ export function VerticalTabGroup({selectedTab}: VerticalTabGroupProps) {
   );
 }
 
-export type VerticalTabData = {
+export type VerticalTabProps = {
   tab: ChannelType;
-  imgSrc: string;
-};
-
-export type VerticalTabProps = VerticalTabData & {
-  onClick: ()=> void;
+  onClick: () => void;
   isSelected: boolean;
 };
 
-function VerticalTab({ tab, onClick, isSelected, imgSrc }: VerticalTabProps) {
+function VerticalTab({ tab, onClick, isSelected }: VerticalTabProps) {
   return (
     <li className="w-[120px] h-[72px] my-4">
       <button
@@ -66,8 +49,8 @@ function VerticalTab({ tab, onClick, isSelected, imgSrc }: VerticalTabProps) {
       >
         {" "}
         <div className="w-full flex flex-col items-center">
-          <img src={imgSrc} className="mb-1 h-5 w-5" />
-          {tab}
+          <img src={ChannelImg[tab]} className="mb-1 h-5 w-5" />
+          {ChannelName[tab]}
         </div>
       </button>
     </li>

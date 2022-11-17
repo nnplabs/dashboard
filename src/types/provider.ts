@@ -1,6 +1,19 @@
+import { Images } from "../images";
 import { DynamicFieldData } from "./dynamic-control-types";
 
 export type ChannelType = "MAIL" | "IN_APP" | "OTHER";
+
+export const ChannelName = {
+  MAIL: "Email",
+  IN_APP: "In App",
+  OTHER: "Other",
+};
+
+export const ChannelImg = {
+  MAIL: Images.Nav.Mail,
+  IN_APP: Images.Nav.InApp,
+  OTHER: Images.Nav.Other,
+}
 
 export type ProviderMetadata = {
   providerType: ProviderKey;

@@ -45,7 +45,7 @@ export function useGetAllProviders(appName: string) {
           position: "top-right",
         });
       },
-      staleTime: 5 * 60 * 1000, // 5 mins
+      staleTime: 10 * 60 * 1000, // 5 mins
     }
   );
   return {
@@ -116,7 +116,7 @@ export function useAllAvailableProviders() {
           position: "top-right",
         });
       },
-      staleTime: 5 * 60 * 1000, // 5 mins
+      staleTime: 10 * 60 * 1000, // 5 mins
     }
   );
 

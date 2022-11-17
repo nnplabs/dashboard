@@ -14,10 +14,17 @@ export type ProviderData = {
   name: string;
   description?: any;
   config: Record<string, string>;
-  channel: string;
-  providerKey: string;
+  channel: Channel;
+  providerKey: ProviderKey;
   statusCallback?: any;
   appId: string;
+  EventProviders: EventProviders[];
   createdAt: Date;
   updatedAt: Date;
-}
+};
+
+export type EventProviders = {
+  appId: string;
+  eventName: string;
+  providerName: string;
+};
