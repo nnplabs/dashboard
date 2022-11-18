@@ -21,6 +21,9 @@ export function CreateTemplateStep({
     data.connectedProviders?.map((p) => p.channel) ?? []
   ).filter((v, i, a) => a.indexOf(v) === i);
 
+  const allChannels :ChannelType[]= ['MAIL', 'IN_APP', 'OTHER']
+  const sortedChannels = allChannels.filter(c => channels.includes(c))
+
   const handleChange = (_: any, newValue: number) => {
     setValue(newValue);
   };
@@ -44,9 +47,9 @@ export function CreateTemplateStep({
             {channels.includes("OTHER") && <Tab label="Telegram Template" />}
           </Tabs>
         </Box>
-        {channels[value] === "MAIL" && <MailTemplate channel="MAIL"/>}
-        {channels[value] === "IN_APP" && <InAppTemplate channel="IN_APP"/>}
-        {channels[value] === "OTHER" && <TelegramTemplate channel="OTHER"/>}
+        {sortedChannels[value] === "MAIL" && <MailTemplate channel="MAIL"/>}
+        {sortedChannels[value] === "IN_APP" && <InAppTemplate channel="IN_APP"/>}
+        {sortedChannels[value] === "OTHER" && <TelegramTemplate channel="OTHER"/>}
       </div>
       <EventStepButton
         handleNext={goToNext}

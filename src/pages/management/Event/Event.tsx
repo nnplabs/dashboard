@@ -1,3 +1,12 @@
+import {
+  DeleteOutline,
+  DeleteOutlined,
+  EditOutlined,
+  SendOutlined,
+  SendSharp,
+} from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
+import dateFormat from "dateformat";
 import { useState } from "react";
 import { BodyLayout } from "../../../components/BodyLayout";
 
@@ -7,6 +16,8 @@ import { useAppContext } from "../../../context/AppContext";
 import { useEventContext } from "../../../context/EventContext";
 import { useAccount } from "../../../hooks/useAccount";
 import { useGetAllEvents } from "../../../hooks/useEvent";
+import { EventData } from "../../../types/api/event";
+import { ChannelType } from "../../../types/provider";
 import CreateEventModal from "./CreateEventModal";
 
 function Event() {
@@ -21,6 +32,14 @@ function Event() {
     isLoading,
   } = useGetAllEvents(app?.selectedApp?.name ?? "");
 
+  console.log(allEvents);
+
+  const handleUpdate = (eventData : EventData) => {
+    const updatedData = {...data, currentEvent: eventData};
+    setData(updatedData);
+    setShow(true);
+  }
+
   const handleClose = () => {
     setData({});
     setShow(false);
@@ -32,8 +51,8 @@ function Event() {
       <Page>
         <div className="flex flex-col h-screen py-8 px-10 bg-gray-100">
           <div className="font-medium text-2xl py-4 text-gray-800">Events</div>
-          <div className="px-4 py-4 bg-white">
-            <div className="py-2 my-4 pr-4 flex justify-between">
+          <div className="px-4 py-4 bg-white h-full flex flex-col">
+            <div className="py-2 my-4 flex justify-between">
               <input
                 type="text"
                 id="first_name"
@@ -42,7 +61,7 @@ function Event() {
               />
               <button
                 type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2  focus:outline-none "
+                className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5  mb-2  focus:outline-none "
                 onClick={() => setShow(true)}
               >
                 <span className="flex justify-center items-center">
@@ -53,67 +72,20 @@ function Event() {
                 </span>
               </button>
             </div>
-            <div className="overflow-x-auto relative">
-              <table className="w-full text-sm text-left text-gray-500 ">
-                <thead className=" text-gray-700 uppercase bg-white border-2 py-4">
-                  <tr>
-                    <th scope="col" className="py-5 px-6">
-                      Name
-                    </th>
-                    <th scope="col" className="py-5 px-6">
-                      Description
-                    </th>
-                    <th scope="col" className="py-5 px-6">
-                      Channels
-                    </th>
-                    <th scope="col" className="py-5 px-6">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm">
-                  <tr className="bg-white border-2">
-                    <th
-                      scope="row"
-                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap "
-                    >
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="py-4 px-6">Sliver</td>
-                    <td className="py-4 px-6">Laptop</td>
-                    <td className="py-4 px-6">$2999</td>
-                  </tr>
-                  <tr className="bg-white border-2">
-                    <div className="py-4 px-6 flex items-center w-full">
-                      No data available. Create a new event to start seeing all
-                      events here.
-                    </div>
-                  </tr>
-                  <tr className="bg-white border-2">
-                    <th
-                      scope="row"
-                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap "
-                    >
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="py-4 px-6">Sliver</td>
-                    <td className="py-4 px-6">Laptop</td>
-                    <td className="py-4 px-6">$2999</td>
-                  </tr>
-                  <tr className="bg-white border-2">
-                    <th
-                      scope="row"
-                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap "
-                    >
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="py-4 px-6">Sliver</td>
-                    <td className="py-4 px-6">Laptop</td>
-                    <td className="py-4 px-6">$2999</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {isFetching ? (
+              <CircularProgress />
+            ) : (
+              <div className="overflow-x-auto relative">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                  <EventTableHead />
+                  <tbody className="text-sm">
+                    {allEvents?.map((e) => {
+                      return <EventTableRow eventData={e} handleUpdate={handleUpdate}/>;
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
         <CreateEventModal
@@ -123,6 +95,72 @@ function Event() {
         />
       </Page>
     </BodyLayout>
+  );
+}
+
+function EventTableHead() {
+  return (
+    <thead className=" text-gray-700 uppercase bg-white border-2 py-4">
+      <tr>
+        <th scope="col" className="py-5 w-[20%] pl-4">
+          Name
+        </th>
+        <th scope="col" className="py-5 w-[20%]">
+          Description
+        </th>
+        <th scope="col" className="py-5 w-[20%]">
+          Last Updated
+        </th>
+        <th scope="col" className="py-5 w-[10%]">
+          Channels
+        </th>
+        <th scope="col" className="py-5 w-[10%] text-right">
+          Status
+        </th>
+        <th scope="col" className="py-5 w-[20%] text-right pr-4">
+          Actions
+        </th>
+      </tr>
+    </thead>
+  );
+}
+
+type EventTableRowProps = {
+  eventData: EventData;
+  handleUpdate: (eventData :EventData) => void;
+}
+
+function EventTableRow({ eventData, handleUpdate }: EventTableRowProps) {
+  return (
+    <tr className="bg-white border-2">
+      <th
+        scope="row"
+        className="py-4 w-[20%] font-medium text-gray-900 whitespace-nowrap pl-4"
+      >
+        {eventData.name}
+      </th>
+      <td className="py-4 w-[20%]">{eventData.metadata?.description ?? ""}</td>
+      <td className="py-4 w-[20%]">
+        {dateFormat(eventData.updatedAt, "dd-mm-yyyy, h:MM TT")}
+      </td>
+      <td className="py-4 w-[10%]">$2999</td>
+      <td className="py-4 w-[10%] text-right">$2999</td>
+      <td className="py-4 w-[20%] text-right pr-3">
+        <EditOutlined className="cursor-pointer mr-2" onClick={() => handleUpdate(eventData)}/>
+        <SendOutlined className="cursor-pointer mr-2" />
+        <DeleteOutlined className="cursor-pointer" />
+      </td>
+    </tr>
+  );
+}
+
+function EmptyRow() {
+  return (
+    <tr className="bg-white border-2">
+      <div className="py-4 flex items-center w-full">
+        No data available. Create a new event to start seeing all events here.
+      </div>
+    </tr>
   );
 }
 

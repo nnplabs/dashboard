@@ -1,6 +1,7 @@
 import { CircularProgress, Switch } from "@mui/material";
 import dateFormat from "dateformat";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { BodyLayout } from "../../../components/BodyLayout";
 import { VerticalTabGroup } from "../../../components/VerticalTabs";
 import { SERVER_URL } from "../../../constants";
@@ -30,9 +31,17 @@ function ConnectProviderStep({
 
   const { data, setData } = useEventContext()!;
 
+  const goToNext = () => {
+    if(data.connectedProviders && data.connectedProviders.length === 0){
+      toast.error('Please select atleast one integration')
+    }else{
+      handleNext();
+    }
+  }
+
   useEffect(() => {
     console.log("DATA : ", data);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (!allProviders) return;
@@ -85,7 +94,7 @@ function ConnectProviderStep({
         </div>
       </BodyLayout>
       <EventStepButton
-        handleNext={handleNext}
+        handleNext={goToNext}
         handleBack={handleBack}
         activeStep={activeStep}
       />

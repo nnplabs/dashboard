@@ -15,8 +15,22 @@ export const createEvent = async (eventData: CreateEventRequest) => {
   return response.data;
 };
 
+export const updateEvent = async (eventData: CreateEventRequest) => {
+  const response = await apiClient.post<EventData>("events/update", {
+    ...eventData,
+  });
+  return response.data;
+};
+
 export const connectProvider = async (connectData: ConnectProviderRequest) => {
   const response = await apiClient.post("events/connect", {
+    ...connectData,
+  });
+  return response.data;
+}
+
+export const updateConnectedProvider = async (connectData: ConnectProviderRequest) => {
+  const response = await apiClient.post("events/updateConnected", {
     ...connectData,
   });
   return response.data;
