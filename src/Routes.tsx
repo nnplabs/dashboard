@@ -14,7 +14,8 @@ import Metric from "./pages/dashboard/Metric";
 import Login from "./pages/Login";
 import Event from "./pages/management/Event/Event";
 import Integration from "./pages/management/Integration/Integration";
-import Setting from "./pages/management/Setting";
+import Settings from "./pages/management/Settings/Setting";
+import Setting from "./pages/management/Settings/Setting";
 import RequireAuth from "./pages/RequireAuth";
 
 export default function AppRoutes() {
@@ -57,7 +58,7 @@ export default function AppRoutes() {
           }
         />
         <Route path="/management/integrations" element={<Integration />} />
-        <Route path="/management/settings" element={<Setting />} />
+        <Route path="/management/settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   );
