@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      retry: 1,
+      retry: 0,
     },
   },
 });
@@ -26,14 +26,12 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <WalletSelectorContextProvider>
-        <AppContextProvider>
-          <ToastContainer />
-          <App />
-        </AppContextProvider>
-      </WalletSelectorContextProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <WalletSelectorContextProvider>
+      <AppContextProvider>
+        <ToastContainer />
+        <App />
+      </AppContextProvider>
+    </WalletSelectorContextProvider>
+  </QueryClientProvider>
 );

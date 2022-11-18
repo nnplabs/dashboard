@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEventContext } from "../../../context/EventContext";
 import { EventStepProps } from "./CreateEventSteps";
 import { EventStepButton } from "./EventStepButton";
@@ -14,7 +14,14 @@ export function EventDetailsStep({
     const [error, setError] = useState<boolean>(false);
   
     const { data, setData } = useEventContext()!;
-  
+    const isUpdate = data.currentEvent !== undefined;
+
+    useEffect(() => {
+      if(!data.currentEvent) return;
+      setName(data.currentEvent.name)
+      setDescription(data.currentEvent.metadata?.description ?? '')
+    },[data])
+
     const goToNext = () => {
       if (!name || name.length === 0) {
         setError(true);
@@ -24,7 +31,7 @@ export function EventDetailsStep({
       setData(updatedData);
       handleNext();
     };
-  
+    
     return (
       <>
         <div className="flex flex-col gap-y-7 h-full w-full bg-white rounded-lg p-7">
@@ -37,18 +44,17 @@ export function EventDetailsStep({
               setError(false);
             }}
             className="w-full"
-            id="outlined-basic"
             label="Event Name"
             required
-            variant="outlined"
+            variant={isUpdate ? 'filled' : 'outlined'}
             helperText={error && "Event name required"}
+            disabled={isUpdate}
           />
           <TextField
             value={description}
             defaultValue={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full"
-            id="outlined-basic"
             label="Event Description"
             rows={4}
             multiline

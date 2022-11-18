@@ -1,11 +1,13 @@
 import { Box, Tabs, Tab } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { convertToRaw, EditorState } from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import { useEventContext } from "../../../context/EventContext";
 import draftToHtml from "draftjs-to-html";
 import { EventStepProps } from "./CreateEventSteps";
 import { EventStepButton } from "./EventStepButton";
+import { ChannelType } from "../../../types/provider";
+import htmlToDraft from "html-to-draftjs";
 
 export function CreateTemplateStep({
   handleNext,
@@ -42,9 +44,9 @@ export function CreateTemplateStep({
             {channels.includes("OTHER") && <Tab label="MAIL TAB" />}
           </Tabs>
         </Box>
-        {channels[value] === "MAIL" && <MailTemplate />}
-        {channels[value] === "IN_APP" && <InAppTemplate />}
-        {channels[value] === "OTHER" && <TelegramTemplate />}
+        {channels[value] === "MAIL" && <MailTemplate channel="MAIL"/>}
+        {channels[value] === "IN_APP" && <InAppTemplate channel="IN_APP"/>}
+        {channels[value] === "OTHER" && <TelegramTemplate channel="OTHER"/>}
       </div>
       <EventStepButton
         handleNext={goToNext}
@@ -55,25 +57,37 @@ export function CreateTemplateStep({
   );
 }
 
-function MailTemplate() {
+function MailTemplate({channel}: {channel: ChannelType}) {
   const [subjectState, setSubjectState] = useState(EditorState.createEmpty());
-  const [bodyState, setBodyState] = useState(EditorState.createEmpty());
+  const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
+  const template: Record<string, Record<string, string>> = data.template ?? {};
+
+  useEffect(() => {
+    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
+    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+    const messageState = EditorState.createWithContent(contentState);
+
+    let { contentBlocks: cbSubject, entityMap: emSubject } =  htmlToDraft(template[channel]?.subject ?? "");;
+    contentState = ContentState.createFromBlockArray(cbSubject, emSubject);
+    const subjectState = EditorState.createWithContent(contentState);
+
+    setSubjectState(subjectState);
+    setMessageState(messageState);
+  }, []);
+
 
   useEffect(() => {
     const newTemplate = {
-      message: draftToHtml(convertToRaw(bodyState.getCurrentContent())),
+      message: draftToHtml(convertToRaw(messageState.getCurrentContent())),
       subject: draftToHtml(convertToRaw(subjectState.getCurrentContent())),
     };
-    const template: Record<string, Record<string, string>> = data.template ??
-    {};
-    template["MAIL"] = newTemplate;
+    template[channel] = newTemplate;
     const updatedData = { ...data, template: template };
     setData(updatedData);
-  }, [subjectState, bodyState]);
+  }, [subjectState, messageState]);
 
-  console.log(data);
   return (
     <div className="flex flex-col p-6 h-full w-full flex-grow bg-white overflow-y-scroll">
       <div className="text-base font-medium text-black my-4"> Subject : </div>
@@ -91,36 +105,42 @@ function MailTemplate() {
       <div className="text-base font-medium text-black my-4"> Body : </div>
       <Editor
         editorStyle={{ minHeight: "150px" }}
-        editorState={bodyState}
+        editorState={messageState}
         toolbarClassName=""
         toolbar={{
           options: ["inline", "textAlign"],
         }}
         wrapperClassName="border-[1px] w-full"
         editorClassName="px-4 overflow-hidden"
-        onEditorStateChange={setBodyState}
+        onEditorStateChange={setMessageState}
       />
     </div>
   );
 }
 
-function InAppTemplate() {
+function InAppTemplate({channel}: {channel: ChannelType}) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
+  const template: Record<string, Record<string, string>> = data.template ?? {};
+
+  useEffect(() => {
+    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
+    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+    const messageState = EditorState.createWithContent(contentState);
+    setMessageState(messageState);
+  }, []);
+
 
   useEffect(() => {
     const newTemplate = {
       message: draftToHtml(convertToRaw(messageState.getCurrentContent())),
     };
-    const template: Record<string, Record<string, string>> = data.template ??
-    {};
-    template["IN_APP"] = newTemplate;
+    template[channel] = newTemplate;
     const updatedData = { ...data, template: template };
     setData(updatedData);
   }, [messageState]);
 
-  console.log(data);
   return (
     <div className="flex flex-col p-6 h-full w-full flex-grow bg-white overflow-y-scroll">
       <div className="text-base font-medium text-black my-4"> Message : </div>
@@ -139,23 +159,29 @@ function InAppTemplate() {
   );
 }
 
-function TelegramTemplate() {
+function TelegramTemplate({channel}: {channel: ChannelType}) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
+  const template: Record<string, Record<string, string>> = data.template ?? {};
+
+  useEffect(() => {
+    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
+    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+    const messageState = EditorState.createWithContent(contentState);
+    setMessageState(messageState);
+  }, []);
+
 
   useEffect(() => {
     const newTemplate = {
       message: draftToHtml(convertToRaw(messageState.getCurrentContent())),
     };
-    const template: Record<string, Record<string, string>> = data.template ??
-    {};
-    template["OTHER"] = newTemplate;
+    template[channel] = newTemplate;
     const updatedData = { ...data, template: template };
     setData(updatedData);
   }, [messageState]);
 
-  console.log(data);
   return (
     <div className="flex flex-col p-6 h-full w-full flex-grow bg-white overflow-y-scroll">
       <div className="text-base font-medium text-black my-4"> Message : </div>

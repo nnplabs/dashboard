@@ -14,6 +14,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import CreateEventSteps from './CreateEventSteps';
 import { Box } from '@mui/material';
+import { useEventContext } from '../../../context/EventContext';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -25,8 +26,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function CreateEventModal({ open, handleClickOpen, handleClose }: { open: boolean, handleClickOpen: () => void, handleClose: () => void }) {
-  const [eventDetails, setEventDetails] = React.useState<Event>()
-  
+  const {data} = useEventContext()!;
   return (
     <div>
       <Dialog
@@ -46,7 +46,7 @@ export default function CreateEventModal({ open, handleClickOpen, handleClose }:
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Create Event
+              {!data.currentEvent ? 'Create' : 'Update'} Event
             </Typography>
           </Toolbar>
         </AppBar>

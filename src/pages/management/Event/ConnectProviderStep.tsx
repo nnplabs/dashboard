@@ -1,7 +1,4 @@
-import {
-  CircularProgress,
-  Switch,
-} from "@mui/material";
+import { CircularProgress, Switch } from "@mui/material";
 import dateFormat from "dateformat";
 import { useEffect, useState } from "react";
 import { BodyLayout } from "../../../components/BodyLayout";
@@ -24,10 +21,14 @@ function ConnectProviderStep({
   const [filteredProviders, setFilteredProviders] = useState<ProviderData[]>(
     []
   );
+  const [loading, setLoading] = useState<boolean>(true);
+
   const app = useAppContext();
   const { data: allProviders, isFetching } = useGetAllProviders(
     app?.selectedApp?.name ?? ""
   );
+
+  const { data, setData } = useEventContext()!;
 
   useEffect(() => {
     if (!allProviders) return;
@@ -35,6 +36,24 @@ function ConnectProviderStep({
       allProviders.filter((p) => p.channel === selectedChannel)
     );
   }, [selectedChannel, allProviders]);
+
+  useEffect(() => {
+    if (!allProviders) return;
+    const connectedProviders: ProviderData[] = [];
+
+    if (data.currentEvent) {
+      data.currentEvent.connectedProviders.map((provider) => {
+        const pData = allProviders.filter(
+          (p) => p.name === provider.providerName
+        );
+        if (pData.length > 0) connectedProviders.push(pData[0]);
+      });
+    }
+
+    const updatedData = { ...data, connectedProviders: connectedProviders };
+    setData(updatedData);
+    setLoading(false);
+  }, [allProviders]);
 
   const heading = `Add ${ChannelName[selectedChannel]} Integrations`;
   const subHeading = `You can use these live integrations to send an  ${ChannelName[selectedChannel]} notification. Select an integration to add it to your event`;
@@ -46,7 +65,7 @@ function ConnectProviderStep({
         <div className="h-full w-full bg-white flex flex-col p-7">
           <div className="text-2xl">{heading}</div>
           <div className="text-sm font-normal text-gray-500">{subHeading}</div>
-          {isFetching ? (
+          {loading ? (
             <div className="m-auto">
               <CircularProgress />
             </div>
