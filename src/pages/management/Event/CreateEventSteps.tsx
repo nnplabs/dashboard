@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import ConnectProviderStep from "./ConnectProviderStep";
 import { EventDetailsStep } from "./EventDetailStep";
@@ -91,8 +90,7 @@ function FinishStep({ handleNext, handleBack }: EventStepProps) {
   const { connectProvider, isError: isConnectError } = useConnectProvider();
 
   useEffect(() => {
-    console.log("Ruuuuuuunnnnnnn");
-    (async () => {
+    async function createEventHandler() {
       if (!data.eventName || !data.template || !data.connectedProviders) return;
       const newEvent = await createEvent({
         appName: app.selectedApp?.name ?? "",
@@ -103,34 +101,30 @@ function FinishStep({ handleNext, handleBack }: EventStepProps) {
         handleBack();
       });
       if(!newEvent) return;
-      toast.success("Event Created Successfully");
+      toast.success("Step[1/2] Event Created Successfully");
+
+      const resConnect = await connectProvider({
+        appName: app.selectedApp?.name ?? '',
+        eventName: data.eventName,
+        providerName: data.connectedProviders.map(p => p.name)
+      }).catch((e) => {
+        handleNext();
+      })
+
+      if(!resConnect) return;
+       if(resConnect.failedCount > 0){
+        toast.error("Step[2/2] Some Integrations Failed To Connect");
+      }else toast.success("Step[2/2] Integrations Added Successfully");
       handleNext();
-      // if (isError) {
-      //   console.log('HERE =====>>>')
-      //   toast.error("Event Creation Failed",  {
-      //     position: "top-right",
-      //   });
-      //   handleNext();
-      //   return;
-      // } else {
-      //   toast.success("Event Created Successfully");
-      // }
-      // const resConnect = await connectProvider({
-      //   appName: app.selectedApp?.name ?? '',
-      //   eventName: data.eventName,
-      //   providerName: data.connectedProviders.map(p => p.name)
-      // })
+    }
 
-      // if(isConnectError) {
-      //   toast.error("Integration Addition Failed");
-      // }
-      // console.log("failed Count : ", resConnect.failedCount)
-      // if(resConnect.failedCount > 0){
-      //   toast.error("Some Integrations Failed");
-      // }
+    async function updateEventHandler() {
 
-      // toast.success("Integrations Added Successfully");
-      // handleNext();
+    }
+
+    (async () => {
+      if(data.currentEvent) await updateEventHandler();
+      else await createEventHandler();
     })();
   }, []);
 

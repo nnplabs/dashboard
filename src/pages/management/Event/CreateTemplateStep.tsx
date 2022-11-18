@@ -39,9 +39,9 @@ export function CreateTemplateStep({
             aria-label="basic tabs example"
             variant="fullWidth"
           >
-            {channels.includes("MAIL") && <Tab label="MAIL TAB" />}
-            {channels.includes("IN_APP") && <Tab label="IN_APP TAB" />}
-            {channels.includes("OTHER") && <Tab label="MAIL TAB" />}
+            {channels.includes("MAIL") && <Tab label="Mail Template" />}
+            {channels.includes("IN_APP") && <Tab label="In App Template" />}
+            {channels.includes("OTHER") && <Tab label="Telegram Template" />}
           </Tabs>
         </Box>
         {channels[value] === "MAIL" && <MailTemplate channel="MAIL"/>}
@@ -62,7 +62,10 @@ function MailTemplate({channel}: {channel: ChannelType}) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
-  const template: Record<string, Record<string, string>> = data.template ?? {};
+  let template: Record<string, Record<string, string>> = data.template ?? {};
+  if(data.currentEvent?.template){
+    template  = data.currentEvent.template
+  }
 
   useEffect(() => {
     let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
@@ -122,7 +125,10 @@ function InAppTemplate({channel}: {channel: ChannelType}) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
-  const template: Record<string, Record<string, string>> = data.template ?? {};
+  let template: Record<string, Record<string, string>> = data.template ?? {};
+  if(data.currentEvent?.template){
+    template  = data.currentEvent.template
+  }
 
   useEffect(() => {
     let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
@@ -163,7 +169,10 @@ function TelegramTemplate({channel}: {channel: ChannelType}) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
-  const template: Record<string, Record<string, string>> = data.template ?? {};
+  let template: Record<string, Record<string, string>> = data.template ?? {};
+  if(data.currentEvent?.template){
+    template  = data.currentEvent.template
+  }
 
   useEffect(() => {
     let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;

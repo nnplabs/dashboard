@@ -17,10 +17,16 @@ export function EventDetailsStep({
     const isUpdate = data.currentEvent !== undefined;
 
     useEffect(() => {
-      if(!data.currentEvent) return;
-      setName(data.currentEvent.name)
-      setDescription(data.currentEvent.metadata?.description ?? '')
-    },[data])
+      console.log("DATA : ", data)
+      if(data.eventName){
+        setName(data.eventName); 
+        setDescription(data.eventDescription);
+      } else {
+        if(!data.currentEvent) return;
+        setName(data.currentEvent.name)
+        setDescription(data.currentEvent.metadata?.description ?? '')
+      }
+    },[])
 
     const goToNext = () => {
       if (!name || name.length === 0) {

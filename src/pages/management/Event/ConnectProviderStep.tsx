@@ -31,6 +31,10 @@ function ConnectProviderStep({
   const { data, setData } = useEventContext()!;
 
   useEffect(() => {
+    console.log("DATA : ", data);
+  }, []);
+
+  useEffect(() => {
     if (!allProviders) return;
     setFilteredProviders(
       allProviders.filter((p) => p.channel === selectedChannel)
@@ -39,19 +43,21 @@ function ConnectProviderStep({
 
   useEffect(() => {
     if (!allProviders) return;
-    const connectedProviders: ProviderData[] = [];
+    if (!data.connectedProviders) {
+      const connectedProviders: ProviderData[] = [];
 
-    if (data.currentEvent) {
-      data.currentEvent.connectedProviders.map((provider) => {
-        const pData = allProviders.filter(
-          (p) => p.name === provider.providerName
-        );
-        if (pData.length > 0) connectedProviders.push(pData[0]);
-      });
+      if (data.currentEvent) {
+        data.currentEvent.connectedProviders.map((provider) => {
+          const pData = allProviders.filter(
+            (p) => p.name === provider.providerName
+          );
+          if (pData.length > 0) connectedProviders.push(pData[0]);
+        });
+      }
+
+      const updatedData = { ...data, connectedProviders: connectedProviders };
+      setData(updatedData);
     }
-
-    const updatedData = { ...data, connectedProviders: connectedProviders };
-    setData(updatedData);
     setLoading(false);
   }, [allProviders]);
 
