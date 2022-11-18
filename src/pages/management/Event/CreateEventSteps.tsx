@@ -9,9 +9,19 @@ import { EventDetailsStep } from "./EventDetailStep";
 import { CreateTemplateStep } from "./CreateTemplateStep";
 import { CircularProgress } from "@mui/material";
 import { useEventContext } from "../../../context/EventContext";
-import { useConnectProvider, useCreateEvent } from "../../../hooks/useEvent";
+import {
+  useConnectProvider,
+  useCreateEvent,
+  useUpdateConnectedProvider,
+  useUpdateEvent,
+} from "../../../hooks/useEvent";
 import { useAppContext } from "../../../context/AppContext";
 import { toast } from "react-toastify";
+import {
+  ConnectProviderRequest,
+  CreateEventRequest,
+  EventData,
+} from "../../../types/api/event";
 
 export const steps = ["Event Details", "Event Channels", "Event Templates"];
 export type EventStepProps = {
@@ -86,53 +96,102 @@ export default function CreateEventSteps({
 function FinishStep({ handleNext, handleBack }: EventStepProps) {
   const { data, setData } = useEventContext()!;
   const app = useAppContext()!;
-  const { createEvent, isLoading } = useCreateEvent();
-  const { connectProvider, isError: isConnectError } = useConnectProvider();
+  const { createEvent } = useCreateEvent();
+  const { updateEvent } = useUpdateEvent();
+  const { connectProvider } = useConnectProvider();
+  const { updateConnectedProvider } = useUpdateConnectedProvider();
+
+  const channels = (
+    data.connectedProviders?.map((p) => p.channel) ?? []
+  ).filter((v, i, a) => a.indexOf(v) === i);
+
+  const isUpdate = data.currentEvent !== undefined;
+
+  const processedTemplate: Record<string, Record<string, string>> = {};
+  channels.map((c) => {
+    if (data.template && data.template[c])
+      processedTemplate[c] = data.template[c];
+  });
 
   useEffect(() => {
-    async function createEventHandler() {
-      if (!data.eventName || !data.template || !data.connectedProviders) return;
-      const newEvent = await createEvent({
+    const eventReqHelper = () => {
+      const event: CreateEventRequest = {
         appName: app.selectedApp?.name ?? "",
-        eventName: data.eventName,
-        template: data.template,
-        metadata: { description: data.eventDescription ?? "" },
-      }).catch((e) => {
-        handleBack();
-      });
-      if(!newEvent) return;
-      toast.success("Step[1/2] Event Created Successfully");
+        eventName: data.eventName!,
+        template: processedTemplate,
+        metadata: {
+          description: data.eventDescription ?? "",
+          channels: channels.join("+"),
+        },
+      };
+      return event;
+    };
 
-      const resConnect = await connectProvider({
-        appName: app.selectedApp?.name ?? '',
-        eventName: data.eventName,
-        providerName: data.connectedProviders.map(p => p.name)
-      }).catch((e) => {
-        handleNext();
-      })
+    const connectReqHelper = () => {
+      const connect: ConnectProviderRequest = {
+        appName: app.selectedApp?.name ?? "",
+        eventName: data.eventName!,
+        providerName: data.connectedProviders!.map((p) => p.name),
+      };
+      return connect;
+    };
 
-      if(!resConnect) return;
-       if(resConnect.failedCount > 0){
-        toast.error("Step[2/2] Some Integrations Failed To Connect");
-      }else toast.success("Step[2/2] Integrations Added Successfully");
+    async function upsertEventHandler() {
+      if (!data.eventName || !data.template || !data.connectedProviders) return;
+      
+      let newEvent;
+      let eventData = eventReqHelper();
+
+      if (isUpdate) {
+        newEvent = await updateEvent(eventData).catch((e) => {
+          handleBack();
+        });
+      } else {
+        newEvent = await createEvent(eventData).catch((e) => {
+          handleBack();
+        });
+      }
+
+      if (!newEvent) return;
+      toast.success(
+        `Step[1/2] Event ${isUpdate ? "Updated" : "Created"} Successfully`
+      );
+
+      let resConnect;
+      let reqConnect = connectReqHelper();
+
+      if (isUpdate) {
+        resConnect = await updateConnectedProvider(reqConnect).catch((e) => {
+          toast.error("Step[2/2] Failed");
+          handleNext();
+        });
+      } else {
+        resConnect = await connectProvider(reqConnect).catch((e) => {
+          toast.error("Step[2/2] Failed");
+          handleNext();
+        });
+      }
+
+      if (!resConnect) return;
+      if (resConnect.failedCount > 0) {
+        toast.warn("Step[2/2] Some Integrations Connections Failed");
+      } else
+        toast.success(
+          `Step[2/2] Integrations ${
+            isUpdate ? "Updated" : "Added"
+          } Successfully`
+        );
       handleNext();
     }
 
-    async function updateEventHandler() {
-
-    }
-
-    (async () => {
-      if(data.currentEvent) await updateEventHandler();
-      else await createEventHandler();
-    })();
+    upsertEventHandler();
   }, []);
 
   return (
     <div className="h-full w-full flex">
       <div className="m-auto flex flex-col items-center">
         <CircularProgress />
-        <div className="text-lg font-medium mt-4">Creating Event...</div>
+        <div className="text-lg font-medium mt-4">{`${isUpdate ? "Updating" : "Creating"} Event`}</div>
       </div>
     </div>
   );
