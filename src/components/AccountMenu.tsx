@@ -17,6 +17,7 @@ import {
 import { MenuList, ListItemText, rgbToHex } from "@mui/material";
 import { useAppContext } from "../context/AppContext";
 import sliceString from "../utils/sliceString";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -39,7 +40,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 40, height: 40, backgroundColor: "#6B7280"}}>M</Avatar>
+            <Avatar sx={{ width: 40, height: 40, backgroundColor: "#6B7280" }}>M</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -86,6 +87,8 @@ export default function AccountMenu() {
 
 export function AccountMenuOptions() {
   const app = useAppContext();
+  const navigate = useNavigate()
+
   return (
     <MenuList>
       <MenuItem>
@@ -114,7 +117,11 @@ export function AccountMenuOptions() {
           <ContentCopyOutlined fontSize="medium" />
         </ListItemIcon>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => navigate("/management/settings", {
+        state: {
+          tab: 3,
+        },
+      })}>
         <ListItemIcon>
           <SettingsOutlined fontSize="medium" />
         </ListItemIcon>
