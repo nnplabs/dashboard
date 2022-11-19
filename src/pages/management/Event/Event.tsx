@@ -1,14 +1,20 @@
 import {
+  ChatBubbleOutlined,
+  ChatOutlined,
   DeleteOutline,
   DeleteOutlined,
   EditOutlined,
+  MailOutlined,
+  PhoneIphoneOutlined,
   SendOutlined,
   SendSharp,
 } from "@mui/icons-material";
 import { CircularProgress } from "@mui/material";
+import classNames from "classnames";
 import dateFormat from "dateformat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BodyLayout } from "../../../components/BodyLayout";
+import { Modal } from "../../../components/Modal";
 
 import Navbar from "../../../components/Navbar";
 import { Page } from "../../../components/Page";
@@ -16,13 +22,16 @@ import { useAppContext } from "../../../context/AppContext";
 import { useEventContext } from "../../../context/EventContext";
 import { useAccount } from "../../../hooks/useAccount";
 import { useGetAllEvents } from "../../../hooks/useEvent";
+import { Images } from "../../../images";
 import { EventData } from "../../../types/api/event";
-import { ChannelType } from "../../../types/provider";
+import { ChannelImg, ChannelType } from "../../../types/provider";
 import CreateEventModal from "./CreateEventModal";
+import AceEditor from "react-ace";
 
 function Event() {
   const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventData>();
   const app = useAppContext();
   const { data, setData } = useEventContext()!;
 
@@ -34,11 +43,11 @@ function Event() {
 
   console.log(allEvents);
 
-  const handleUpdate = (eventData : EventData) => {
-    const updatedData = {...data, currentEvent: eventData};
+  const handleUpdate = (eventData: EventData) => {
+    const updatedData = { ...data, currentEvent: eventData };
     setData(updatedData);
     setShow(true);
-  }
+  };
 
   const handleClose = () => {
     setData({});
@@ -73,14 +82,22 @@ function Event() {
               </button>
             </div>
             {isFetching ? (
-              <CircularProgress />
+              <div className="m-auto">
+                <CircularProgress />
+              </div>
             ) : (
               <div className="overflow-x-auto relative">
                 <table className="w-full text-sm text-left text-gray-500 ">
                   <EventTableHead />
                   <tbody className="text-sm">
                     {allEvents?.map((e) => {
-                      return <EventTableRow eventData={e} handleUpdate={handleUpdate}/>;
+                      return (
+                        <EventTableRow
+                          eventData={e}
+                          handleUpdate={handleUpdate}
+                          handleSend={() => setSelectedEvent(e)}
+                        />
+                      );
                     })}
                   </tbody>
                 </table>
@@ -93,8 +110,105 @@ function Event() {
           handleClickOpen={() => setShow(true)}
           handleClose={handleClose}
         />
+        {selectedEvent && (
+          <Modal onClose={() => setSelectedEvent(undefined)}>
+            {(toggle) => (
+              <SendEventDialog onCloseHandler={toggle} event={selectedEvent} />
+            )}
+          </Modal>
+        )}
       </Page>
     </BodyLayout>
+  );
+}
+
+type SendEventDialogProps = {
+  onCloseHandler: () => void;
+  event: EventData;
+};
+
+export function SendEventDialog({
+  event,
+  onCloseHandler,
+}: SendEventDialogProps) {
+  const test = {
+    new_address: "My new Address",
+    new_flat: "My new flat",
+  };
+
+  const [data, setData] = useState<string>(JSON.stringify(test, null, "\t"));
+  const [user, setUser] = useState<string>(JSON.stringify(test, null, "\t"));
+
+  useEffect(() => {
+    console.log(data);
+    console.log(user);
+  }, [data, user]);
+  return (
+    <div className={"w-[600px] flex flex-col overflow-y-scroll"}>
+      <SendEventDialogHeader event={event} onCloseHandler={onCloseHandler} />
+      <div className="px-7 py-6 w-full h-full">
+        <div className="text-black text-base mb-3 font-medium">
+          Recepient Details
+        </div>
+        <AceEditor
+          className="max-h-[150px] w-full rounded-md border-[1px] min-w-[540px]"
+          mode="json"
+          theme="github"
+          name="editor"
+          value={user}
+          showGutter={true}
+          onChange={setUser}
+          fontSize={14}
+          editorProps={{ $blockScrolling: true }}
+        />
+        <div className="text-black text-base mt-10 mb-3 font-medium">
+          Dynamic Data
+        </div>
+        <AceEditor
+          className="max-h-[250px] w-full border-[1px] rounded-md min-w-[540px]"
+          mode="json"
+          theme="github"
+          name="editor"
+          value={data}
+          showGutter={true}
+          onChange={setData}
+          fontSize={14}
+          editorProps={{ $blockScrolling: true }}
+        />
+        <div className="flex flex-row justify-end">
+          <button
+            type="submit"
+            className={classNames(
+              "font-medium rounded-lg text-sm px-5 py-2.5 mt-7 focus:outline-none w-fit bg-blue-700 hover:bg-blue-800 text-white"
+            )}
+          >
+            SEND
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SendEventDialogHeader({
+  event,
+  onCloseHandler,
+}: SendEventDialogProps) {
+  return (
+    <div className="h-[76px] py-4 px-6 flex flex-row border-b-2 border-b-gray-200 items-center">
+      <div className="flex flex-col">
+        <div className="text-black text-xl font-medium">{`Send Event: ${event.name}`}</div>
+        <div className="text-gray-500 text-sm mt-1 font-normal">
+          Add the recepient details and any dynamic data that you wish to send
+        </div>
+      </div>
+      <div className="flex flex-1" />
+      <img
+        src={Images.Other.CloseIcon}
+        className="h-5 w-5 cursor-pointer"
+        onClick={onCloseHandler}
+      />
+    </div>
   );
 }
 
@@ -127,10 +241,26 @@ function EventTableHead() {
 
 type EventTableRowProps = {
   eventData: EventData;
-  handleUpdate: (eventData :EventData) => void;
-}
+  handleSend: (eventData: EventData) => void;
+  handleUpdate: (eventData: EventData) => void;
+};
 
-function EventTableRow({ eventData, handleUpdate }: EventTableRowProps) {
+function EventTableRow({
+  eventData,
+  handleUpdate,
+  handleSend,
+}: EventTableRowProps) {
+  const channels = eventData.metadata?.channels ?? "";
+  const isOnChain =
+    (eventData.metadata?.onChain ?? "").toLowerCase() === "true";
+  const parsedChannels = channels.split("+") as ChannelType[];
+
+  const imgSrc = {
+    MAIL: <MailOutlined className="h-2 w-2" />,
+    IN_APP: <PhoneIphoneOutlined className="h-2 w-2" />,
+    OTHER: <ChatOutlined className="h-2 w-2" />,
+  };
+
   return (
     <tr className="bg-white border-2">
       <th
@@ -143,11 +273,23 @@ function EventTableRow({ eventData, handleUpdate }: EventTableRowProps) {
       <td className="py-4 w-[20%]">
         {dateFormat(eventData.updatedAt, "dd-mm-yyyy, h:MM TT")}
       </td>
-      <td className="py-4 w-[10%]">$2999</td>
-      <td className="py-4 w-[10%] text-right">$2999</td>
+      <td className="py-4 w-[10%]">
+        <div className="flex flex-row items-center">
+          {parsedChannels.map((ch) => imgSrc[ch as ChannelType])}
+        </div>
+      </td>
+      <td className="py-4 w-[10%] text-right">
+        <LiveBadge isOnChain={isOnChain} />
+      </td>
       <td className="py-4 w-[20%] text-right pr-3">
-        <EditOutlined className="cursor-pointer mr-2" onClick={() => handleUpdate(eventData)}/>
-        <SendOutlined className="cursor-pointer mr-2" />
+        <EditOutlined
+          className="cursor-pointer mr-2"
+          onClick={() => handleUpdate(eventData)}
+        />
+        <SendOutlined
+          className="cursor-pointer mr-2"
+          onClick={() => handleSend(eventData)}
+        />
         <DeleteOutlined className="cursor-pointer" />
       </td>
     </tr>
@@ -161,6 +303,19 @@ function EmptyRow() {
         No data available. Create a new event to start seeing all events here.
       </div>
     </tr>
+  );
+}
+
+function LiveBadge({ isOnChain }: { isOnChain: boolean }) {
+  return (
+    <div
+      className={classNames("inline-block text-xs font-semibold w-max p-1", {
+        "text-green-700  bg-green-100": !isOnChain,
+        "text-orange-700  bg-orange-100": isOnChain,
+      })}
+    >
+      {isOnChain ? `ON CHAIN` : `LIVE`}
+    </div>
   );
 }
 
