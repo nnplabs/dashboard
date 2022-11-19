@@ -29,20 +29,20 @@ export default function IntegrationFormDialog({
   );
 }
 
-type IntegrationFormHeaderProps = {
+export type IntegrationFormHeaderProps = {
   providerName: string;
-  providerLogo: string;
+  providerLogo?: string;
   onCloseHandler: () => void;
 };
 
-function IntegrationFormHeader({
+export function IntegrationFormHeader({
   onCloseHandler,
   providerLogo,
   providerName,
 }: IntegrationFormHeaderProps) {
   return (
     <div className="h-[76px] py-4 px-6 flex flex-row border-b-2 border-b-gray-200 items-center">
-      <img src={providerLogo} className="h-10 w-10 mr-3" />
+      {providerLogo && <img src={providerLogo} className="h-10 w-10 mr-3" />}
       <div className="text-black text-xl font-medium">{providerName}</div>
       <div className="flex flex-1" />
       <img

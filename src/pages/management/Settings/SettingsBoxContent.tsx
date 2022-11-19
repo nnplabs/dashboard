@@ -1,6 +1,7 @@
 import { Close, Help, OpenInFull, Telegram } from '@mui/icons-material'
 import { List, ListItem } from '@mui/material'
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAppContext } from '../../../context/AppContext'
 import { useAccount } from '../../../hooks/useAccount'
 import { AppData } from '../../../types/api/app'
@@ -10,7 +11,8 @@ import NewApp from './NewApp'
 import SwitchApps from './SwitchApps'
 
 function SettingsBoxContent() {
-    const [open, setOpen] = React.useState(0)
+    const location = useLocation()
+    const [open, setOpen] = React.useState(location.state?.tab ?? 0)
     const app = useAppContext()
     
     const handleAppSwitchClose = (newApp: AppData) => {

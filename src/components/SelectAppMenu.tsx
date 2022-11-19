@@ -14,6 +14,7 @@ import {
   Divider,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import sliceString from "../utils/sliceString";
 
@@ -74,6 +75,8 @@ export function SelectAppButton({
 
 export function SelectAppOptions() {
   const app = useAppContext();
+  const navigate = useNavigate()
+
   return (
     <MenuList>
       <MenuItem>
@@ -90,14 +93,22 @@ export function SelectAppOptions() {
           <ContentCopyOutlined fontSize="medium" />
         </ListItemIcon>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => navigate("/management/settings", {
+        state: {
+          tab: 0,
+        },
+      })}>
         <ListItemIcon>
           <SettingsOutlined fontSize="medium" />
         </ListItemIcon>
         <ListItemText>App Settings</ListItemText>
       </MenuItem>
       <Divider />
-      <MenuItem>
+      <MenuItem onClick={() => navigate("/management/settings", {
+        state: {
+          tab: 2,
+        },
+      })}>
         <ListItemIcon>
           <SettingsEthernetOutlined fontSize="medium" />
         </ListItemIcon>

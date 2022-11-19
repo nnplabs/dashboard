@@ -1,8 +1,9 @@
-import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
+import { DeleteOutlined, InfoOutlined } from "@mui/icons-material";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import dateFormat from "dateformat";
 import React, { useEffect, useState } from "react";
 import { BodyLayout } from "../../../../components/BodyLayout";
+import { Modal } from "../../../../components/Modal";
 import { VerticalTabGroup } from "../../../../components/VerticalTabs";
 import { SERVER_URL } from "../../../../constants";
 import { useAppContext } from "../../../../context/AppContext";
@@ -13,6 +14,7 @@ import {
   ChannelName,
   ChannelImg,
 } from "../../../../types/provider";
+import ProviderDetailsDialog from "./ProviderDetailsDialog";
 
 function LiveIntegrations() {
   const [selectedChannel, setSelectedChannel] = useState<ChannelType>("MAIL");
@@ -25,7 +27,7 @@ function LiveIntegrations() {
   const { data: allProviders, isFetching } = useGetAllProviders(
     app?.selectedApp?.name ?? ""
   );
-
+    console.log(allProviders);
   useEffect(() => {
     if (!allProviders) return;
     setFilteredProviders(
@@ -37,6 +39,7 @@ function LiveIntegrations() {
   const subHeading = `You can use these live integrations to send an  ${ChannelName[selectedChannel]} notification. Select an integration while creating your event`;
 
   return (
+    <>
     <BodyLayout className="px-10 pb-10">
       <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)} />
       <div className="h-full w-full bg-white flex flex-col p-7">
@@ -49,16 +52,28 @@ function LiveIntegrations() {
         ) : (
           <table className="w-full text-sm text-left text-gray-500 mt-7">
             {filteredProviders.map((p) => (
-              <ProviderRow provider={p} key={p.name} />
+              <ProviderRow viewDetails={(p) => setSelectedProvider(p)} provider={p} key={p.name} />
             ))}
           </table>
         )}
       </div>
     </BodyLayout>
+    {selectedProvider && (
+      <Modal onClose={() => setSelectedProvider(undefined)}>
+        {(toggle) => (
+          <ProviderDetailsDialog
+            onCloseHandler={toggle}
+            provider={selectedProvider}
+          />
+        )}
+      </Modal>
+    )}
+    </>
   );
 }
 
-function ProviderRow({ provider }: { provider: ProviderData }) {
+// onCloseDetails={() => setSelectedProvider(undefined)}
+function ProviderRow({ provider, viewDetails }: { provider: ProviderData, viewDetails: (p: ProviderData) => void }) {
   return (
     <tbody className="text-sm text-gray-700 font-medium">
       <tr className="bg-white border-b-[1px]">
@@ -75,7 +90,7 @@ function ProviderRow({ provider }: { provider: ProviderData }) {
           <LiveBadge count={provider.EventProviders.length} />
         </td>
         <td className="py-4 w-1/5 text-right pr-4">
-          <EditOutlined className="cursor-pointer mr-4" />
+          <InfoOutlined onClick={() => viewDetails(provider)} className="cursor-pointer mr-4" />
           <DeleteOutlined className="cursor-pointer" />
         </td>
       </tr>

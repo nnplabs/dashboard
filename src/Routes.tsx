@@ -16,6 +16,7 @@ import Event from "./pages/management/Event/Event";
 import Integration from "./pages/management/Integration/Integration";
 import Settings from "./pages/management/Settings/Setting";
 import Setting from "./pages/management/Settings/Setting";
+import RegisterAccount from "./pages/RegisterAccount";
 import RequireAuth from "./pages/RequireAuth";
 
 export default function AppRoutes() {
@@ -59,6 +60,7 @@ export default function AppRoutes() {
         />
         <Route path="/management/integrations" element={<Integration />} />
         <Route path="/management/settings" element={<Settings />} />
+        <Route path="/register" element={<RegisterAccount />} />
       </Routes>
     </BrowserRouter>
   );
