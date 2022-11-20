@@ -28,6 +28,9 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const app = useAppContext();
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -40,7 +43,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 40, height: 40, backgroundColor: "#6B7280" }}>M</Avatar>
+            <Avatar sx={{ width: 40, height: 40, backgroundColor: "#6B7280" }}>{app?.account?.name[0].toUpperCase() ?? '#'}</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -110,7 +113,7 @@ export function AccountMenuOptions() {
         <ListItemText>
           <div className="flex-col">
             <div className="text-xs text-gray-500 font-bold">API Key</div>
-            <div>{sliceString(app?.account.apiKey)}</div>
+            <div>{sliceString(app?.account?.apiKey)}</div>
           </div>
         </ListItemText>
         <ListItemIcon>

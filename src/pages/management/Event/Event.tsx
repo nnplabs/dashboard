@@ -27,6 +27,9 @@ import { EventData } from "../../../types/api/event";
 import { ChannelImg, ChannelType } from "../../../types/provider";
 import CreateEventModal from "./CreateEventModal";
 import AceEditor from "react-ace";
+import { PageTopBar } from "../../../components/PageTopBar";
+import { toast } from "react-toastify";
+import { useSendEvent } from "../../../hooks/useSend";
 
 function Event() {
   const [search, setSearch] = useState("");
@@ -58,9 +61,9 @@ function Event() {
     <BodyLayout>
       <Navbar selectedTab="Events" />
       <Page>
-        <div className="flex flex-col h-screen py-8 px-10 bg-gray-100">
-          <div className="font-medium text-2xl py-4 text-gray-800">Events</div>
-          <div className="px-4 py-4 bg-white h-full flex flex-col">
+        <PageTopBar title="Events" subTitle="Management >" />
+        <div className="flex flex-col h-screen pb-8 px-10 mt-14 bg-gray-100">
+          <div className="px-4 py-4 bg-white h-full flex flex-col rounded-md">
             <div className="py-2 my-4 flex justify-between">
               <input
                 type="text"
@@ -131,61 +134,85 @@ export function SendEventDialog({
   event,
   onCloseHandler,
 }: SendEventDialogProps) {
-  const test = {
-    new_address: "My new Address",
-    new_flat: "My new flat",
+  const userSample = {
+    userWalletAddress: "",
   };
 
-  const [data, setData] = useState<string>(JSON.stringify(test, null, "\t"));
-  const [user, setUser] = useState<string>(JSON.stringify(test, null, "\t"));
+  const { isLoading, sendEvent } = useSendEvent();
 
-  useEffect(() => {
-    console.log(data);
-    console.log(user);
-  }, [data, user]);
+  const [data, setData] = useState<string>(JSON.stringify({}, null, "\t"));
+  const [user, setUser] = useState<string>(
+    JSON.stringify(userSample, null, "\t")
+  );
+
+  const app = useAppContext();
+  const handleSubmit = async () => {
+    let parsedUser, parsedConfig;
+    try {
+      parsedUser = JSON.parse(user);
+      parsedConfig = JSON.parse(data);
+    } catch (e) {
+      toast.error("Invalid Json Format");
+    }
+
+    await sendEvent({
+      appName: app?.selectedApp?.name ?? "",
+      eventName: event.name,
+      userWalletAddress: parsedUser.userWalletAddress,
+      data: parsedConfig
+    })
+  };
+
   return (
     <div className={"w-[600px] flex flex-col overflow-y-scroll"}>
       <SendEventDialogHeader event={event} onCloseHandler={onCloseHandler} />
-      <div className="px-7 py-6 w-full h-full">
-        <div className="text-black text-base mb-3 font-medium">
-          Recepient Details
+      {isLoading ? (
+        <div className="h-[600p] flex m-auto">
+          <CircularProgress />
         </div>
-        <AceEditor
-          className="max-h-[150px] w-full rounded-md border-[1px] min-w-[540px]"
-          mode="json"
-          theme="github"
-          name="editor"
-          value={user}
-          showGutter={true}
-          onChange={setUser}
-          fontSize={14}
-          editorProps={{ $blockScrolling: true }}
-        />
-        <div className="text-black text-base mt-10 mb-3 font-medium">
-          Dynamic Data
+      ) : (
+        <div className="px-7 py-6 w-full h-full">
+          <div className="text-black text-base mb-3 font-medium">
+            Recepient Details
+          </div>
+          <AceEditor
+            className="max-h-[150px] w-full rounded-md border-[1px] min-w-[540px]"
+            mode="json"
+            theme="github"
+            name="editor"
+            value={user}
+            showGutter={true}
+            onChange={setUser}
+            fontSize={14}
+            editorProps={{ $blockScrolling: true }}
+          />
+          <div className="text-black text-base mt-10 mb-3 font-medium">
+            Dynamic Data
+          </div>
+          <AceEditor
+            className="max-h-[250px] w-full border-[1px] rounded-md min-w-[540px]"
+            mode="json"
+            theme="github"
+            name="editor"
+            value={data}
+            showGutter={true}
+            onChange={setData}
+            fontSize={14}
+            editorProps={{ $blockScrolling: true }}
+          />
+          <div className="flex flex-row justify-end">
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className={classNames(
+                "font-medium rounded-lg text-sm px-5 py-2.5 mt-7 focus:outline-none w-fit bg-blue-700 hover:bg-blue-800 text-white"
+              )}
+            >
+              SEND
+            </button>
+          </div>
         </div>
-        <AceEditor
-          className="max-h-[250px] w-full border-[1px] rounded-md min-w-[540px]"
-          mode="json"
-          theme="github"
-          name="editor"
-          value={data}
-          showGutter={true}
-          onChange={setData}
-          fontSize={14}
-          editorProps={{ $blockScrolling: true }}
-        />
-        <div className="flex flex-row justify-end">
-          <button
-            type="submit"
-            className={classNames(
-              "font-medium rounded-lg text-sm px-5 py-2.5 mt-7 focus:outline-none w-fit bg-blue-700 hover:bg-blue-800 text-white"
-            )}
-          >
-            SEND
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

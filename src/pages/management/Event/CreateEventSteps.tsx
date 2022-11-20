@@ -122,6 +122,7 @@ function FinishStep({ handleNext, handleBack }: EventStepProps) {
         metadata: {
           description: data.eventDescription ?? "",
           channels: channels.join("+"),
+          onChain: data.currentEvent?.metadata?.onChain ?? 'false',
         },
       };
       return event;

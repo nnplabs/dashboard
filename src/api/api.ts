@@ -14,9 +14,9 @@ apiClient.interceptors.response.use(
   },
   async (error) => {
     if (error instanceof AxiosError) {
-      if (error.response?.status === 403) {
-        document.location.href = "/login";
-      }
+      // if (error.response?.status === 403) {
+      //   document.location.href = "/login";
+      // }
     }
     return Promise.reject(error);
   }

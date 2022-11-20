@@ -32,12 +32,12 @@ function ConnectProviderStep({
   const { data, setData } = useEventContext()!;
 
   const goToNext = () => {
-    if(data.connectedProviders && data.connectedProviders.length === 0){
-      toast.error('Please select atleast one integration')
-    }else{
+    if (data.connectedProviders && data.connectedProviders.length === 0) {
+      toast.error("Please select atleast one integration");
+    } else {
       handleNext();
     }
-  }
+  };
 
   useEffect(() => {
     console.log("DATA : ", data);
@@ -86,9 +86,13 @@ function ConnectProviderStep({
             </div>
           ) : (
             <table className="w-full text-sm text-left text-gray-500 mt-7">
-              {filteredProviders.map((p) => (
-                <ProviderRow provider={p} key={p.name} />
-              ))}
+              {filteredProviders.length > 0 ? (
+                filteredProviders.map((p) => (
+                  <ProviderRow provider={p} key={p.name} />
+                ))
+              ) : (
+                <EmptyRow />
+              )}
             </table>
           )}
         </div>
@@ -155,6 +159,18 @@ function ProviderName({ provider }: { provider: ProviderData }) {
         <div className="text-xs text-gray-500">{provider.providerKey}</div>
       </div>
     </div>
+  );
+}
+
+function EmptyRow() {
+  return (
+    <tr className="bg-white border-y-[1px] text-sm">
+      <td className="py-4 flex text-center w-full">
+        <div className="inline-block w-full">
+          No live integrations added for this channel.
+        </div>
+      </td>
+    </tr>
   );
 }
 

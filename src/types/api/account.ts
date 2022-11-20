@@ -5,6 +5,7 @@ export interface AccountData {
   name: string;
   apiKey: string;
   ownerAddress: string;
+  contractAddress: string;
   createdAt: Date;
   updatedAt: Date;
   App: AppData[];

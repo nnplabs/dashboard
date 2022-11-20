@@ -7,7 +7,7 @@ function AccountSettings() {
     const app = useAppContext()
 
     useEffect(() => {
-        if (app) setName(app?.account.name || '')
+        if (app) setName(app?.account?.name || '')
     }, [app])
 
   return (
@@ -22,6 +22,14 @@ function AccountSettings() {
                 </div>
                 <div className='ml-8'>
                     {app?.account?.id}
+                </div>
+            </div>
+            <div className='flex items-center'>
+                <div className='font-bold w-24 text-right'>
+                    API Key:
+                </div>
+                <div className='ml-8'>
+                    {app?.account?.apiKey}
                 </div>
             </div>
             <div className='flex items-center'>

@@ -57,7 +57,7 @@ function SettingsBoxContent() {
                 </ListItem>
             </List>
             {open === 3 ? <AccountSettings/> : <AppSettings/>}
-            <SwitchApps open={open === 2} appList={app?.account.App} selectedApp={app?.selectedApp} onClose={handleAppSwitchClose} />
+            <SwitchApps open={open === 2} appList={app?.account?.App} selectedApp={app?.selectedApp} onClose={handleAppSwitchClose} />
             <NewApp open={open === 1} onClose={() => setOpen(0)} onCreate={handleCreateApp} />
         </div>
     )

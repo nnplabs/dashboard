@@ -3,16 +3,11 @@ import React, { useState } from "react";
 import { Images } from "../images";
 import { useNavigate } from "react-router-dom";
 
-type TabType = "Metrics" | "Integrations" | "Logs" | "Settings" | "Events";
+type TabType = "Metrics" | "Integrations" | "Logs" | "Settings" | "Events" | "Users";
 const NavData: NavBarGroupData[] = [
   {
     title: "Dashboard",
     navBarItems: [
-      {
-        title: "Metrics",
-        route: "/dashboard/metrics",
-        imgSrc: "monitoring",
-      },
       {
         title: "Logs",
         route: "/dashboard/logs",
@@ -32,6 +27,11 @@ const NavData: NavBarGroupData[] = [
         title: "Integrations",
         route: "/management/integrations",
         imgSrc: "send",
+      },
+      {
+        title: "Users",
+        route: "/management/users",
+        imgSrc: "person",
       },
       {
         title: "Settings",
@@ -70,8 +70,8 @@ function NavBarLogo() {
         className="mr-3 h-6 sm:h-7"
         alt="Flowbite Logo"
       />
-      <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-        NNP
+      <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
+        Near Notify
       </span>
     </a>
   );

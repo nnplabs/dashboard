@@ -1,15 +1,16 @@
 import { CircularProgress } from "@mui/material";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAccount } from "../hooks/useAccount";
 import { useGetAllApps } from "../hooks/useApp";
 import { AccountData } from "../types/api/account";
 import { AppData } from "../types/api/app";
 
 export type AppContextData = {
-  allApps: AppData[];
+  allApps?: AppData[];
+  account?: AccountData;
   selectedApp: AppData | undefined;
   setSelectedApp: (app: AppData) => void;
-  account: AccountData;
 };
 
 const AppContext = React.createContext<AppContextData | undefined>(undefined);
@@ -31,7 +32,7 @@ export const AppContextProvider = ({ children }: any): ReactElement => {
     if (isAppDeleted) setSelectedApp(allApps[0]);
   }, [allApps]);
 
-  if (isAccountLoading || isAppLoading || !allApps || !accountData)
+  if (isAccountLoading || isAppLoading)
     return (
         <AppContext.Provider value={undefined}>{children}</AppContext.Provider>
     );

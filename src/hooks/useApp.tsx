@@ -25,10 +25,11 @@ export function useGetApp(appName: string) {
 export function useGetAllApps() {
   const { isLoading, data } = useQuery(["getAlApps"], () => getAllApps(), {
     onError: (error: AxiosError) => {
-      const data: any = error?.response?.data;
-      toast.error(`${data?.explanation ?? data?.reason}`, {
-        position: "top-right",
-      });
+      console.log("All apps can't be fetched : ", error);
+      // const data: any = error?.response?.data;
+      // toast.error(`${data?.explanation ?? data?.reason}`, {
+      //   position: "top-right",
+      // });
     },
     staleTime: 10 * 60 * 1000, // 10 mins
   });

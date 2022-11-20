@@ -27,11 +27,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <WalletSelectorContextProvider>
-      <AppContextProvider>
+    <AppContextProvider>
+      <WalletSelectorContextProvider>
         <ToastContainer />
         <App />
-      </AppContextProvider>
-    </WalletSelectorContextProvider>
+      </WalletSelectorContextProvider>
+    </AppContextProvider>
   </QueryClientProvider>
 );

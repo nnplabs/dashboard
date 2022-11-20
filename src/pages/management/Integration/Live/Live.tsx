@@ -1,5 +1,13 @@
 import { DeleteOutlined, InfoOutlined } from "@mui/icons-material";
-import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import dateFormat from "dateformat";
 import React, { useEffect, useState } from "react";
 import { BodyLayout } from "../../../../components/BodyLayout";
@@ -27,7 +35,7 @@ function LiveIntegrations() {
   const { data: allProviders, isFetching } = useGetAllProviders(
     app?.selectedApp?.name ?? ""
   );
-    console.log(allProviders);
+  console.log(allProviders);
   useEffect(() => {
     if (!allProviders) return;
     setFilteredProviders(
@@ -40,40 +48,54 @@ function LiveIntegrations() {
 
   return (
     <>
-    <BodyLayout className="px-10 pb-10">
-      <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)} />
-      <div className="h-full w-full bg-white flex flex-col p-7">
-        <div className="text-2xl">{heading}</div>
-        <div className="text-sm font-normal text-gray-500">{subHeading}</div>
-        {isFetching ? (
-          <div className="m-auto">
-            <CircularProgress />
-          </div>
-        ) : (
-          <table className="w-full text-sm text-left text-gray-500 mt-7">
-            {filteredProviders.map((p) => (
-              <ProviderRow viewDetails={(p) => setSelectedProvider(p)} provider={p} key={p.name} />
-            ))}
-          </table>
-        )}
-      </div>
-    </BodyLayout>
-    {selectedProvider && (
-      <Modal onClose={() => setSelectedProvider(undefined)}>
-        {(toggle) => (
-          <ProviderDetailsDialog
-            onCloseHandler={toggle}
-            provider={selectedProvider}
-          />
-        )}
-      </Modal>
-    )}
+      <BodyLayout className="px-10 pb-10">
+        <VerticalTabGroup selectedTab={(tab) => setSelectedChannel(tab)} />
+        <div className="h-full w-full bg-white flex flex-col p-7">
+          <div className="text-2xl">{heading}</div>
+          <div className="text-sm font-normal text-gray-500">{subHeading}</div>
+          {isFetching ? (
+            <div className="m-auto">
+              <CircularProgress />
+            </div>
+          ) : (
+            <table className="w-full text-sm text-left text-gray-500 mt-7">
+              {filteredProviders.length > 0 ? (
+                filteredProviders.map((p) => (
+                  <ProviderRow
+                    viewDetails={(p) => setSelectedProvider(p)}
+                    provider={p}
+                    key={p.name}
+                  />
+                ))
+              ) : (
+                <EmptyRow />
+              )}
+            </table>
+          )}
+        </div>
+      </BodyLayout>
+      {selectedProvider && (
+        <Modal onClose={() => setSelectedProvider(undefined)}>
+          {(toggle) => (
+            <ProviderDetailsDialog
+              onCloseHandler={toggle}
+              provider={selectedProvider}
+            />
+          )}
+        </Modal>
+      )}
     </>
   );
 }
 
 // onCloseDetails={() => setSelectedProvider(undefined)}
-function ProviderRow({ provider, viewDetails }: { provider: ProviderData, viewDetails: (p: ProviderData) => void }) {
+function ProviderRow({
+  provider,
+  viewDetails,
+}: {
+  provider: ProviderData;
+  viewDetails: (p: ProviderData) => void;
+}) {
   return (
     <tbody className="text-sm text-gray-700 font-medium">
       <tr className="bg-white border-b-[1px]">
@@ -90,11 +112,26 @@ function ProviderRow({ provider, viewDetails }: { provider: ProviderData, viewDe
           <LiveBadge count={provider.EventProviders.length} />
         </td>
         <td className="py-4 w-1/5 text-right pr-4">
-          <InfoOutlined onClick={() => viewDetails(provider)} className="cursor-pointer mr-4" />
+          <InfoOutlined
+            onClick={() => viewDetails(provider)}
+            className="cursor-pointer mr-4"
+          />
           <DeleteOutlined className="cursor-pointer" />
         </td>
       </tr>
     </tbody>
+  );
+}
+
+function EmptyRow() {
+  return (
+    <tr className="bg-white border-y-[1px] text-sm">
+      <td className="py-4 flex text-center w-full">
+        <div className="inline-block w-full">
+          No live integrations added for this channel. 
+        </div>
+      </td>
+    </tr>
   );
 }
 
@@ -116,7 +153,7 @@ function ProviderName({ provider }: { provider: ProviderData }) {
 function LiveBadge({ count }: { count: number }) {
   return (
     <div className="inline-block text-xs font-semibold text-green-700 p-1 bg-green-100 w-max">
-      {`${count} LIVE`}
+      {`${count} CONNECTED EVENTS`}
     </div>
   );
 }
@@ -149,8 +186,8 @@ export function AlertDialog() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

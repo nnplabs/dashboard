@@ -17,7 +17,7 @@ function ProviderDetailsDialog({
         />
         <div className="flex flex-col h-full w-full p-7 gap-4">
             {
-                Object.entries(provider.config).map(([key, value]) => {
+                Object.entries(provider.config ?? {}).map(([key, value]) => {
                     return (
                         <div className="flex flex-col gap-2 my-2">
                             <div className="text-gray-700 text font-medium">{key}:</div>

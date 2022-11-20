@@ -16,6 +16,7 @@ import Event from "./pages/management/Event/Event";
 import Integration from "./pages/management/Integration/Integration";
 import Settings from "./pages/management/Settings/Setting";
 import Setting from "./pages/management/Settings/Setting";
+import User from "./pages/management/User/User";
 import RegisterAccount from "./pages/RegisterAccount";
 import RequireAuth from "./pages/RequireAuth";
 
@@ -23,7 +24,14 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/management/events" />} />
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Navigate to="/management/events" />
+            </RequireAuth>
+          }
+        />
         <Route
           path="login"
           element={
@@ -58,9 +66,38 @@ export default function AppRoutes() {
             </RequireAuth>
           }
         />
-        <Route path="/management/integrations" element={<Integration />} />
-        <Route path="/management/settings" element={<Settings />} />
-        <Route path="/register" element={<RegisterAccount />} />
+        <Route
+          path="/management/integrations"
+          element={
+            <RequireAuth>
+              <Integration />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/management/users"
+          element={
+            <RequireAuth>
+              <User />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/management/settings"
+          element={
+            <RequireAuth>
+              <Settings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RequireAuth>
+              <RegisterAccount />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

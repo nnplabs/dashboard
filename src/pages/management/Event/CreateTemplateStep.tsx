@@ -1,6 +1,11 @@
 import { Box, Tabs, Tab } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { ContentState, convertToRaw, EditorState } from "draft-js";
+import {
+  ContentState,
+  convertToRaw,
+  EditorState,
+  convertFromRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import { useEventContext } from "../../../context/EventContext";
 import draftToHtml from "draftjs-to-html";
@@ -8,6 +13,8 @@ import { EventStepProps } from "./CreateEventSteps";
 import { EventStepButton } from "./EventStepButton";
 import { ChannelType } from "../../../types/provider";
 import htmlToDraft from "html-to-draftjs";
+import { draftToMarkdown, markdownToDraft } from "markdown-draft-js";
+import AceEditor from "react-ace";
 
 export function CreateTemplateStep({
   handleNext,
@@ -21,8 +28,8 @@ export function CreateTemplateStep({
     data.connectedProviders?.map((p) => p.channel) ?? []
   ).filter((v, i, a) => a.indexOf(v) === i);
 
-  const allChannels :ChannelType[]= ['MAIL', 'IN_APP', 'OTHER']
-  const sortedChannels = allChannels.filter(c => channels.includes(c))
+  const allChannels: ChannelType[] = ["MAIL", "IN_APP", "OTHER"];
+  const sortedChannels = allChannels.filter((c) => channels.includes(c));
 
   const handleChange = (_: any, newValue: number) => {
     setValue(newValue);
@@ -47,9 +54,13 @@ export function CreateTemplateStep({
             {channels.includes("OTHER") && <Tab label="Telegram Template" />}
           </Tabs>
         </Box>
-        {sortedChannels[value] === "MAIL" && <MailTemplate channel="MAIL"/>}
-        {sortedChannels[value] === "IN_APP" && <InAppTemplate channel="IN_APP"/>}
-        {sortedChannels[value] === "OTHER" && <TelegramTemplate channel="OTHER"/>}
+        {sortedChannels[value] === "MAIL" && <MailTemplate channel="MAIL" />}
+        {sortedChannels[value] === "IN_APP" && (
+          <InAppTemplate channel="IN_APP" />
+        )}
+        {sortedChannels[value] === "OTHER" && (
+          <TelegramTemplate channel="OTHER" />
+        )}
       </div>
       <EventStepButton
         handleNext={goToNext}
@@ -60,29 +71,32 @@ export function CreateTemplateStep({
   );
 }
 
-function MailTemplate({channel}: {channel: ChannelType}) {
+function MailTemplate({ channel }: { channel: ChannelType }) {
   const [subjectState, setSubjectState] = useState(EditorState.createEmpty());
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
   let template: Record<string, Record<string, string>> = data.template ?? {};
-  if(data.currentEvent?.template){
-    template  = data.currentEvent.template
+  if (data.currentEvent?.template) {
+    template = data.currentEvent.template;
   }
 
   useEffect(() => {
-    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
-    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+    let { contentBlocks: cbMessage, entityMap: emMessage } = htmlToDraft(
+      template[channel]?.message ?? ""
+    );
+    let contentState = ContentState.createFromBlockArray(cbMessage, emMessage);
     const messageState = EditorState.createWithContent(contentState);
 
-    let { contentBlocks: cbSubject, entityMap: emSubject } =  htmlToDraft(template[channel]?.subject ?? "");;
+    let { contentBlocks: cbSubject, entityMap: emSubject } = htmlToDraft(
+      template[channel]?.subject ?? ""
+    );
     contentState = ContentState.createFromBlockArray(cbSubject, emSubject);
     const subjectState = EditorState.createWithContent(contentState);
 
     setSubjectState(subjectState);
     setMessageState(messageState);
   }, []);
-
 
   useEffect(() => {
     const newTemplate = {
@@ -124,22 +138,23 @@ function MailTemplate({channel}: {channel: ChannelType}) {
   );
 }
 
-function InAppTemplate({channel}: {channel: ChannelType}) {
+function InAppTemplate({ channel }: { channel: ChannelType }) {
   const [messageState, setMessageState] = useState(EditorState.createEmpty());
 
   const { data, setData } = useEventContext()!;
   let template: Record<string, Record<string, string>> = data.template ?? {};
-  if(data.currentEvent?.template){
-    template  = data.currentEvent.template
+  if (data.currentEvent?.template) {
+    template = data.currentEvent.template;
   }
 
   useEffect(() => {
-    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
-    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+    let { contentBlocks: cbMessage, entityMap: emMessage } = htmlToDraft(
+      template[channel]?.message ?? ""
+    );
+    let contentState = ContentState.createFromBlockArray(cbMessage, emMessage);
     const messageState = EditorState.createWithContent(contentState);
     setMessageState(messageState);
   }, []);
-
 
   useEffect(() => {
     const newTemplate = {
@@ -168,26 +183,70 @@ function InAppTemplate({channel}: {channel: ChannelType}) {
   );
 }
 
-function TelegramTemplate({channel}: {channel: ChannelType}) {
-  const [messageState, setMessageState] = useState(EditorState.createEmpty());
+// function TelegramTemplate({channel}: {channel: ChannelType}) {
+//   const [messageState, setMessageState] = useState(EditorState.createEmpty());
+
+//   const { data, setData } = useEventContext()!;
+//   let template: Record<string, Record<string, string>> = data.template ?? {};
+//   if(data.currentEvent?.template){
+//     template  = data.currentEvent.template
+//   }
+
+//   useEffect(() => {
+//     let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
+//     let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
+//     const messageState = EditorState.createWithContent(contentState);
+//     setMessageState(messageState);
+//   }, []);
+
+//   useEffect(() => {
+//     const newTemplate = {
+//       message: messageState.getCurrentContent().getPlainText('\u0001'),
+//     };
+//     template[channel] = newTemplate;
+//     const updatedData = { ...data, template: template };
+//     setData(updatedData);
+//   }, [messageState]);
+
+//   return (
+//     <div className="flex flex-col p-6 h-full w-full flex-grow bg-white overflow-y-scroll">
+//       <div className="text-base font-medium text-black my-4"> Message : </div>
+//       <Editor
+//         editorStyle={{ minHeight: "150px" }}
+//         editorState={messageState}
+//         toolbarClassName=""
+//         toolbar={{
+//           options: ["inline", "textAlign"],
+//         }}
+//         wrapperClassName="border-[1px] w-full"
+//         editorClassName="px-4 overflow-hidden"
+//         onEditorStateChange={setMessageState}
+//       />
+//     </div>
+//   );
+// }
+
+function TelegramTemplate({ channel }: { channel: ChannelType }) {
+  const [messageState, setMessageState] = useState<string>('');
 
   const { data, setData } = useEventContext()!;
   let template: Record<string, Record<string, string>> = data.template ?? {};
-  if(data.currentEvent?.template){
-    template  = data.currentEvent.template
+  if (data.currentEvent?.template) {
+    template = data.currentEvent.template;
   }
 
   useEffect(() => {
-    let { contentBlocks:cbMessage, entityMap:emMessage } = htmlToDraft(template[channel]?.message ?? "");;
-    let contentState = ContentState.createFromBlockArray(cbMessage,emMessage);
-    const messageState = EditorState.createWithContent(contentState);
-    setMessageState(messageState);
+    // let { contentBlocks: cbMessage, entityMap: emMessage } = htmlToDraft(
+      
+    // );
+    // let contentState = ContentState.createFromBlockArray(cbMessage, emMessage);
+    // const messageState = EditorState.createWithContent(contentState);
+    setMessageState(template[channel]?.message ?? "");
   }, []);
-
 
   useEffect(() => {
     const newTemplate = {
-      message: draftToHtml(convertToRaw(messageState.getCurrentContent())),
+      message: messageState,
     };
     template[channel] = newTemplate;
     const updatedData = { ...data, template: template };
@@ -197,16 +256,16 @@ function TelegramTemplate({channel}: {channel: ChannelType}) {
   return (
     <div className="flex flex-col p-6 h-full w-full flex-grow bg-white overflow-y-scroll">
       <div className="text-base font-medium text-black my-4"> Message : </div>
-      <Editor
-        editorStyle={{ minHeight: "150px" }}
-        editorState={messageState}
-        toolbarClassName=""
-        toolbar={{
-          options: ["inline", "textAlign"],
-        }}
-        wrapperClassName="border-[1px] w-full"
-        editorClassName="px-4 overflow-hidden"
-        onEditorStateChange={setMessageState}
+      <AceEditor
+        className="max-h-[250px] w-full border-[1px] rounded-md min-w-[100%]"
+        mode="json"
+        theme="github"
+        name="editor"
+        value={messageState}
+        showGutter={true}
+        onChange={setMessageState}
+        fontSize={14}
+        editorProps={{ $blockScrolling: true }}
       />
     </div>
   );
