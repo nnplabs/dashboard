@@ -36,8 +36,11 @@ function RegisterAccount() {
           </div>
         </div>
         {isLoading ? (
-          <div className="flex m-auto">
+          <div className="flex flex-col m-auto items-center">
             <CircularProgress />
+            <div className="font-bold text-gray-700 py-10">
+              Please wait while we setup your project. This may take a few minutes.
+            </div>
           </div>
         ) : (
           <>
