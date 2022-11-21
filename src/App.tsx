@@ -4,7 +4,7 @@ import AppRoutes from "./Routes";
 
 export default function App() {
   const data = useAppContext();
-  console.log("app data", data);
+  console.log("app data output", data);
   return !data ? (
     <div className="h-full w-full flex">
       <CircularProgress className="m-auto" />
