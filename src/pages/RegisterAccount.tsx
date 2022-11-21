@@ -2,6 +2,7 @@ import { Button, CircularProgress, TextField } from "@mui/material";
 import React from "react";
 import { toast } from "react-toastify";
 import { useSetupAccount } from "../hooks/useAccount";
+import { Images } from "../images";
 
 function RegisterAccount() {
   const [accountName, setAccountName] = React.useState("");
@@ -21,7 +22,19 @@ function RegisterAccount() {
 
   return (
     <div className="flex bg-gray-100 h-screen w-screen">
-      <div className="flex flex-col gap-y-7 w-[600px] m-auto bg-white rounded-lg p-7 pt-14">
+      <div className="flex flex-col gap-y-7 w-[600px] m-auto bg-white rounded-lg p-7">
+        <div className="flex flex-row w-full mb-6">
+          <img
+            src={Images.Other.NearLogo}
+            className="h-12 w-12 mr-3 mt-[5px]"
+          />
+          <div className="flex flex-col w-full justify-between">
+            <div className="text-2xl font-normal">NEAR NOTIFY</div>
+            <div className="text-md text-gray-500 font-medium">
+              An end-to-end notification infrastructure for near.
+            </div>
+          </div>
+        </div>
         {isLoading ? (
           <div className="flex m-auto">
             <CircularProgress />
