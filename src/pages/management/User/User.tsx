@@ -2,6 +2,7 @@ import { CircularProgress } from "@mui/material";
 import classNames from "classnames";
 import dateFormat from "dateformat";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { BodyLayout } from "../../../components/BodyLayout";
 import Navbar from "../../../components/Navbar";
 import { Page } from "../../../components/Page";
@@ -9,6 +10,7 @@ import { PageTopBar } from "../../../components/PageTopBar";
 import { useAppContext } from "../../../context/AppContext";
 import { useGetAllUsers } from "../../../hooks/useUser";
 import { UserData } from "../../../types/api/user";
+import sliceString from "../../../utils/sliceString";
 
 function User() {
   const app = useAppContext();
@@ -68,27 +70,44 @@ function UserTableHead() {
 }
 
 function UserTableRow({ user }: { user: UserData }) {
+  let parsedWallet = user.walletAddress ?? "";
+  if (!user.walletAddress.includes(".")) {
+    parsedWallet = sliceString(parsedWallet);
+  }
   return (
     <tr className="bg-white border-b-[1px]">
-      <td className="py-4 w-[25%] text-center">{user.walletAddress ?? ""}</td>
-      <td className="py-4 w-[25%] text-center">{dateFormat(user.updatedAt, "dd-mm-yyyy, h:MM TT")}</td>
-      <td className="py-4 w-[25%] text-center">{<LiveBadge isConnected={!!user.email} />}</td>
-      <td className="py-4 w-[25%] text-center">{<LiveBadge isConnected={user.telegramData.length > 0} />}</td>
+      <td
+        className="py-4 w-[25%] text-center cursor-pointer"
+        onClick={() => {
+          navigator.clipboard.writeText(user.walletAddress);
+          toast.info("Wallet Address Copied!", {position: 'bottom-center'})
+        }}
+      >
+        {parsedWallet}
+      </td>
+      <td className="py-4 w-[25%] text-center">
+        {dateFormat(user.updatedAt, "dd-mm-yyyy, h:MM TT")}
+      </td>
+      <td className="py-4 w-[25%] text-center">
+        {<LiveBadge isConnected={!!user.email} />}
+      </td>
+      <td className="py-4 w-[25%] text-center">
+        {<LiveBadge isConnected={user.telegramData.length > 0} />}
+      </td>
     </tr>
   );
 }
 
-
 function LiveBadge({ isConnected }: { isConnected: boolean }) {
-    return (
-      <div
-        className={classNames("inline-block text-xs font-semibold w-max p-1", {
-          "text-green-700  bg-green-100": isConnected,
-          "text-orange-700  bg-orange-100": !isConnected,
-        })}
-      >
-        {isConnected ? `CONNECTED` : `NOT CONNECTED`}
-      </div>
-    );
-  }
+  return (
+    <div
+      className={classNames("inline-block text-xs font-semibold w-max p-1", {
+        "text-green-700  bg-green-100": isConnected,
+        "text-orange-700  bg-orange-100": !isConnected,
+      })}
+    >
+      {isConnected ? `CONNECTED` : `NOT CONNECTED`}
+    </div>
+  );
+}
 export default User;

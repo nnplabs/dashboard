@@ -1,5 +1,6 @@
 import {
   ChatBubbleOutlined,
+  ChatBubbleOutlineOutlined,
   ChatOutlined,
   DeleteOutline,
   DeleteOutlined,
@@ -9,7 +10,7 @@ import {
   SendOutlined,
   SendSharp,
 } from "@mui/icons-material";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Tooltip } from "@mui/material";
 import classNames from "classnames";
 import dateFormat from "dateformat";
 import { useEffect, useState } from "react";
@@ -283,9 +284,9 @@ function EventTableRow({
   const parsedChannels = channels.split("+") as ChannelType[];
 
   const imgSrc = {
-    MAIL: <MailOutlined className="h-2 w-2" />,
-    IN_APP: <PhoneIphoneOutlined className="h-2 w-2" />,
-    OTHER: <ChatOutlined className="h-2 w-2" />,
+    MAIL: <Tooltip children={<MailOutlined className="h-2 w-2"/>} title={"MAIL"}/>,
+    IN_APP: <Tooltip children={<PhoneIphoneOutlined className="h-2 w-2" />} title={"IN APP"}/>,
+    OTHER: <Tooltip children={<ChatBubbleOutlineOutlined className="h-2 w-2" />} title={"OTHER"}/>,
   };
 
   return (
