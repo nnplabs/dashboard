@@ -1,46 +1,111 @@
-# Getting Started with Create React App
+# Near Notification Protocol Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Near Notification Protocol Backend repository. The frontend dashboard is build in React.js(typescript). It allows dapps to easily get onboarded to our infrastructure without writing any code. It also provides them an interface to manage multiple events as well to send off-chain notifications.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-### `yarn start`
+## Introduction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Near Notification Protocol is an end-to-end notification architecture designed exclusively for dApps running on the Near Protocol. It offers a comprehensive solution for managing and sending notifications, enabling dApps to keep their users engaged and informed. The system is built with scalability and low-latency in mind, ensuring efficient delivery of notifications.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Features
 
-### `yarn test`
+- **Multiple Notification Channels**: Near Notification Protocol supports various notification channels, including in-app notifications, Telegram, and email, with plans to add support for push notifications and webhooks in the near future.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **User Analytics**: The backend manages user-related services, providing dApps with valuable insights into their users' behavior. This data helps dApps make informed decisions and tailor their notifications effectively.
 
-### `yarn build`
+- **On-Chain Event Integration**: The backend interacts with the parser service to retrieve on-chain events and process them, enhancing the quality and relevance of notifications.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Before you can run this project, you need to have the following software installed:
 
-### `yarn eject`
+- [Node.js](https://nodejs.org/) (v16 or higher)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Installation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone this repository to your local machine:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+   ```bash
+   https://github.com/nnplabs/dashboard.git
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+2. Navigate to the project directory:
 
-## Learn More
+   ```bash
+   cd dashboard
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Install the required dependencies:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   yarn install
+
+5. Run the development server:
+   ```bash
+   yarn start
+   ```
+   
+   Now, the Near Notification Protocol Frontend is up and running on your local environment.
+
+## Project Structure
+The project's source code is organized as follows:
+
+```
+- dashboard/  
+  ─ public/ - Public assets
+  ─ src/ - Source code
+  ─ api/ - Directory for API-related code, which may include various API endpoints and related functions.
+  ─ components/ - Houses reusable React components used across different parts of the app.
+  ─ context/ - Contains context-related code, facilitating state management across the app.
+  ─ hooks/ - Custom React hooks that help abstract and share logic within the components.
+  ─ images/ - Stores images and assets used within the application.
+  ─ mock/ - Contains mock data, useful for testing and development purposes.
+  ─ pages/ - Holds React pages or views that represent different parts of application.
+  ─ styles/ - Includes stylesheets and CSS files for styling.
+  ─ types/ - Stores TypeScript type definitions for the project.
+  ─ utils/ - Contains utility functions and modules used throughout the application.
+  ─ App.tsx - The main application component that serves as the entry point for the React application.
+  ─ Routes.tsx - Configures application routing, defining the routes available in the app.
+  ─ constants.ts - Contains application constants and configuration settings.
+  ─ custom.d.ts - Custom TypeScript definitions specific to the project.
+  ─ index.tsx - The application entry point.
+  ─ react-app-env.d.ts - Environment-specific TypeScript definitions.
+  ─ .gitignore   
+  ─ package.json 
+  ─ README.md  
+```
+
+## Project Demo
+
+Watch the demo of our project on [YouTube](https://youtu.be/EeZOyy3B3FM) to see the Near Notification Service in action. This video showcases the project's features and functionality.
+
+## Devpost Submission
+
+We have submitted this project to [Devpost](https://devpost.com/software/near-notification-service). You can check out our submission and learn more about the project's features, goals, and how it was built.
+
+
+## Contributing
+If you would like to contribute to this project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes.
+4. Test your changes thoroughly.
+5. Commit and push your changes to your forked repository.
+6. Submit a pull request, explaining your changes and why they should be merged.
+
+Thank you for contributing!
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
