@@ -65,22 +65,22 @@ The project's source code is organized as follows:
 - dashboard/  
   ─ public/ - Public assets
   ─ src/ - Source code
-  ─ api/ - Directory for API-related code, which may include various API endpoints and related functions.
-  ─ components/ - Houses reusable React components used across different parts of the app.
-  ─ context/ - Contains context-related code, facilitating state management across the app.
-  ─ hooks/ - Custom React hooks that help abstract and share logic within the components.
-  ─ images/ - Stores images and assets used within the application.
-  ─ mock/ - Contains mock data, useful for testing and development purposes.
-  ─ pages/ - Holds React pages or views that represent different parts of application.
-  ─ styles/ - Includes stylesheets and CSS files for styling.
-  ─ types/ - Stores TypeScript type definitions for the project.
-  ─ utils/ - Contains utility functions and modules used throughout the application.
-  ─ App.tsx - The main application component that serves as the entry point for the React application.
-  ─ Routes.tsx - Configures application routing, defining the routes available in the app.
-  ─ constants.ts - Contains application constants and configuration settings.
-  ─ custom.d.ts - Custom TypeScript definitions specific to the project.
-  ─ index.tsx - The application entry point.
-  ─ react-app-env.d.ts - Environment-specific TypeScript definitions.
+    ─ api/ - Directory for API-related code, which may include various API endpoints and related functions.
+    ─ components/ - Houses reusable React components used across different parts of the app.
+    ─ context/ - Contains context-related code, facilitating state management across the app.
+    ─ hooks/ - Custom React hooks that help abstract and share logic within the components.
+    ─ images/ - Stores images and assets used within the application.
+    ─ mock/ - Contains mock data, useful for testing and development purposes.
+    ─ pages/ - Holds React pages or views that represent different parts of application.
+    ─ styles/ - Includes stylesheets and CSS files for styling.
+    ─ types/ - Stores TypeScript type definitions for the project.
+    ─ utils/ - Contains utility functions and modules used throughout the application.
+    ─ App.tsx - The main application component that serves as the entry point for the React application.
+    ─ Routes.tsx - Configures application routing, defining the routes available in the app.
+    ─ constants.ts - Contains application constants and configuration settings.
+    ─ custom.d.ts - Custom TypeScript definitions specific to the project.
+    ─ index.tsx - The application entry point.
+    ─ react-app-env.d.ts - Environment-specific TypeScript definitions.
   ─ .gitignore   
   ─ package.json 
   ─ README.md  
